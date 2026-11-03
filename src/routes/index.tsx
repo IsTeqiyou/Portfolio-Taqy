@@ -404,7 +404,7 @@ function Lightbox() {
     <div onClick={() => setSrc(null)} className="fixed inset-0 z-[90] grid cursor-zoom-out place-items-center bg-foreground/70 p-6 backdrop-blur-sm">
       <figure className="zoom-in relative bg-card p-3 shadow-soft">
         <img src={src} alt="Foto diperbesar" className="max-h-[75vh] max-w-[88vw] object-contain sm:max-w-[70vw]" />
-        <button type="button" aria-label="Tutup" className="absolute -top-4 -right-4 grid h-9 w-9 place-items-center rounded-full border-2 border-border bg-rose font-bold text-primary-foreground">✕</button>
+        <button type="button" aria-label="Tutup" className="absolute -top-4 right-0 grid h-9 w-9 sm:-right-4 place-items-center rounded-full border-2 border-border bg-rose font-bold text-primary-foreground">✕</button>
       </figure>
     </div>
   );
