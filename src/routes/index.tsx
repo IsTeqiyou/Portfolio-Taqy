@@ -159,6 +159,17 @@ function Hero() {
   );
 }
 
+function Polaroid({ src, cap, rot, d, fit }: { src: string; cap: string; rot: string; d: string; fit?: boolean }) {
+  return (
+    <figure onClick={() => zoom(src)} className="reveal relative mx-auto w-full max-w-56 cursor-zoom-in bg-card p-2 pb-8 sm:p-3 sm:pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
+      style={{ transform: `rotate(${rot})`, "--d": d } as React.CSSProperties}>
+      <span className="tape -top-3 left-1/2 -translate-x-1/2 -rotate-3" />
+      <img src={src} alt={cap} className={`aspect-[3/4] w-full bg-foreground/90 ${fit ? "object-contain" : "object-cover"}`} loading="lazy" />
+      <figcaption className="absolute bottom-2 inset-x-0 text-center font-hand text-base sm:text-lg">{cap}</figcaption>
+    </figure>
+  );
+}
+
 function About() {
   const paras = [
     "Hi there! Nama saya Muhammad Taqiyuddin, biasa dipanggil Taqy.",
@@ -167,14 +178,6 @@ function About() {
     "The vibe di pondok juga makin seru karena dikelilingi banyak teman seperjuangan. To blow off some steam dari rutinitas harian, saya biasanya suka play sports kayak futsal atau berenang bareng mereka.",
     "Right now, mendekati graduation, saya lagi in the process of applying ke perguruan tinggi swasta (PTS). With all the skills, hafalan, dan life experience selama di pondok, saya definitely ready and more confident buat melangkah ke jenjang kuliah!",
   ];
-  const Polaroid = ({ src, cap, rot, d, fit }: { src: string; cap: string; rot: string; d: string; fit?: boolean }) => (
-    <figure onClick={() => zoom(src)} className="reveal relative mx-auto w-full max-w-56 cursor-zoom-in bg-card p-2 pb-8 sm:p-3 sm:pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
-      style={{ transform: `rotate(${rot})`, "--d": d } as React.CSSProperties}>
-      <span className="tape -top-3 left-1/2 -translate-x-1/2 -rotate-3" />
-      <img src={src} alt={cap} className={`aspect-[3/4] w-full bg-foreground/90 ${fit ? "object-contain" : "object-cover"}`} loading="lazy" />
-      <figcaption className="absolute bottom-2 inset-x-0 text-center font-hand text-base sm:text-lg">{cap}</figcaption>
-    </figure>
-  );
   return (
     <section id="about" className="paper relative min-h-screen px-6 py-28">
       <div className="mx-auto max-w-6xl">
