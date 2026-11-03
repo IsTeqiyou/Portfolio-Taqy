@@ -4,7 +4,6 @@ import me from "@/assets/me.jpg.asset.json";
 import mem1 from "@/assets/memory1.jpg.asset.json";
 import mem2 from "@/assets/memory2.jpg.asset.json";
 import mem3 from "@/assets/memory3.jpg.asset.json";
-import mem4 from "@/assets/memory4.jpg.asset.json";
 import mem5 from "@/assets/memory5.jpg.asset.json";
 import mem6 from "@/assets/memory6.png.asset.json";
 import cert1 from "@/assets/cert1.jpg.asset.json";
@@ -12,6 +11,10 @@ import cert2 from "@/assets/cert2.jpg.asset.json";
 import cert3 from "@/assets/cert3.jpg.asset.json";
 import cert4 from "@/assets/cert4.jpg.asset.json";
 import cert5 from "@/assets/cert5.jpg.asset.json";
+import cert6 from "@/assets/cert6.png.asset.json";
+import mem4b from "@/assets/memory4b.jpg.asset.json";
+
+const zoom = (src: string) => window.dispatchEvent(new CustomEvent("zoom-photo", { detail: src }));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -144,7 +147,7 @@ function Hero() {
           <div className="absolute inset-0 translate-x-6 translate-y-6 -rotate-3 rounded-3xl bg-foreground/85 blur-[2px]" />
           <div className="absolute inset-0 -translate-x-4 translate-y-3 rotate-6 rounded-3xl bg-sun" />
           <div className="floaty relative" style={{ "--r": "-2deg" } as React.CSSProperties}>
-            <img src={me.url} alt="Muhammad Taqiyuddin" className="relative w-full rounded-3xl border-2 border-border shadow-soft" />
+            <img src={me.url} alt="Muhammad Taqiyuddin" onClick={() => zoom(me.url)} className="relative w-full cursor-zoom-in rounded-3xl border-2 border-border shadow-soft" />
           </div>
           <span className="floaty absolute -top-6 -right-4 flex rotate-12 items-center gap-2 font-hand text-3xl text-rose" style={{ animationDelay: "1s" }}>
             <svg viewBox="0 0 24 24" className="h-7 w-7 -rotate-6" fill="currentColor" aria-hidden="true"><path d="M13.6 1.8 4.2 13.4h5.4l-1.4 8.8 9.6-11.8h-5.6z" /></svg>
@@ -164,12 +167,12 @@ function About() {
     "The vibe di pondok juga makin seru karena dikelilingi banyak teman seperjuangan. To blow off some steam dari rutinitas harian, saya biasanya suka play sports kayak futsal atau berenang bareng mereka.",
     "Right now, mendekati graduation, saya lagi in the process of applying ke perguruan tinggi swasta (PTS). With all the skills, hafalan, dan life experience selama di pondok, saya definitely ready and more confident buat melangkah ke jenjang kuliah!",
   ];
-  const Polaroid = ({ src, cap, rot, d }: { src: string; cap: string; rot: string; d: string }) => (
-    <figure className="reveal relative mx-auto w-full max-w-56 bg-card p-3 pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
+  const Polaroid = ({ src, cap, rot, d, fit }: { src: string; cap: string; rot: string; d: string; fit?: boolean }) => (
+    <figure onClick={() => zoom(src)} className="reveal relative mx-auto w-full max-w-56 cursor-zoom-in bg-card p-2 pb-8 sm:p-3 sm:pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
       style={{ transform: `rotate(${rot})`, "--d": d } as React.CSSProperties}>
       <span className="tape -top-3 left-1/2 -translate-x-1/2 -rotate-3" />
-      <img src={src} alt={cap} className="aspect-[3/4] w-full object-cover" loading="lazy" />
-      <figcaption className="absolute bottom-2 inset-x-0 text-center font-hand text-lg">{cap}</figcaption>
+      <img src={src} alt={cap} className={`aspect-[3/4] w-full bg-foreground/90 ${fit ? "object-contain" : "object-cover"}`} loading="lazy" />
+      <figcaption className="absolute bottom-2 inset-x-0 text-center font-hand text-base sm:text-lg">{cap}</figcaption>
     </figure>
   );
   return (
@@ -178,19 +181,21 @@ function About() {
         <p className="reveal font-hand text-2xl text-muted-foreground">tentang aku!</p>
         <h2 className="reveal mt-2 inline-block border-2 border-border bg-card px-5 py-2 font-pixel text-3xl shadow-hard sm:text-4xl">Siapa Saya?</h2>
         <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1fr_2fr_1fr]">
-          <Polaroid src={mem1.url} cap="sesi" rot="-5deg" d="100ms" />
-          <div className="space-y-5 font-hand text-xl leading-relaxed sm:text-2xl">
+          <div className="grid grid-cols-3 gap-4 lg:grid-cols-1 lg:gap-10">
+            <Polaroid src={mem1.url} cap="sesi" rot="-5deg" d="100ms" />
+            <Polaroid src={mem3.url} cap="yang" rot="4deg" d="200ms" />
+            <Polaroid src={mem4b.url} cap="selalu" rot="-3deg" d="300ms" fit />
+          </div>
+          <div className="order-first space-y-5 font-hand lg:order-none text-xl leading-relaxed sm:text-2xl">
             {paras.map((p, i) => (
               <p key={i} className={`reveal ${i === 0 ? "text-2xl font-bold sm:text-3xl" : ""}`} style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>{p}</p>
             ))}
           </div>
-          <Polaroid src={mem2.url} cap="potret" rot="6deg" d="300ms" />
-        </div>
-        <div className="mt-16 grid grid-cols-2 gap-10 md:grid-cols-4">
-          <Polaroid src={mem3.url} cap="yang" rot="-4deg" d="0ms" />
-          <Polaroid src={mem4.url} cap="selalu" rot="3deg" d="120ms" />
-          <Polaroid src={mem5.url} cap="kuuu" rot="-2deg" d="240ms" />
-          <Polaroid src={mem6.url} cap="benci" rot="5deg" d="360ms" />
+          <div className="grid grid-cols-3 gap-4 lg:grid-cols-1 lg:gap-10">
+            <Polaroid src={mem2.url} cap="potret" rot="6deg" d="150ms" />
+            <Polaroid src={mem5.url} cap="kuuu" rot="-4deg" d="250ms" />
+            <Polaroid src={mem6.url} cap="benci" rot="3deg" d="350ms" fit />
+          </div>
         </div>
       </div>
     </section>
@@ -234,11 +239,12 @@ const CERTS = [
   { src: cert2.url, t: "Pengampu Halaqoh", s: "Tahfizh & IT Bootcamp · 2022", icon: "⌨", c: "bg-sky text-primary-foreground" },
   { src: cert5.url, t: "Liwaul Furqon Championship VI", s: "Peserta · Maret 2023", icon: "⚑", c: "bg-mint" },
   { src: cert3.url, t: "Dauroh Tuhfathul Athfal", s: "Peserta · Ramadhan 1444 H", icon: "☾", c: "bg-rose text-primary-foreground" },
+  { src: cert6.url, t: "Front-End Web untuk Pemula", s: "Dicoding Academy · Nov 2024", icon: "</>", c: "bg-sky text-primary-foreground" },
   { src: cert1.url, t: "Ilqo Terbaik", s: "Certificate of Appreciation · 2024", icon: "♛", c: "bg-ember text-primary-foreground" },
 ];
 
 function Certificates() {
-  const rots = ["-3deg", "2deg", "-1deg", "3deg", "-2deg"];
+  const rots = ["-3deg", "2deg", "-1deg", "3deg", "-2deg", "1deg"];
   return (
     <div className="mt-24">
       <p className="reveal font-hand text-2xl text-muted-foreground">koleksi dari pondok 🏆</p>
@@ -249,11 +255,11 @@ function Certificates() {
           <figure key={c.t} className="reveal group relative" style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>
             <div className="border-2 border-border bg-card p-3 shadow-hard transition-transform duration-500 group-hover:rotate-0 group-hover:-translate-y-2" style={{ transform: `rotate(${rots[i]})` }}>
               <span className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2" />
-              <div className="overflow-hidden border-2 border-border">
+              <div onClick={() => zoom(c.src)} className="cursor-zoom-in overflow-hidden border-2 border-border">
                 <img src={c.src} alt={`Sertifikat ${c.t}`} loading="lazy" className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-110" />
               </div>
               <figcaption className="mt-3 flex items-start gap-3">
-                <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-border text-lg ${c.c}`}>{c.icon}</span>
+                <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-border text-sm font-bold ${c.c}`}>{c.icon}</span>
                 <span>
                   <span className="block font-bold leading-tight">{c.t}</span>
                   <span className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{c.s}</span>
@@ -277,9 +283,9 @@ function Project() {
         <div className="mt-12 grid items-center gap-10 md:grid-cols-[3fr_2fr]">
           <article className="reveal group relative" style={{ "--d": "150ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-sky px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 01</span>
-            <div className="border-2 border-border bg-foreground p-8 text-primary-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="torn-bottom border-2 border-border bg-foreground p-6 pb-12 text-primary-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest opacity-70">● Aplikasi Android</p>
-              <h3 className="mt-3 text-5xl font-bold">Qyqalb App</h3>
+              <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Qyqalb App</h3>
               <p className="mt-4 max-w-md opacity-80">Aplikasi kumpulan doa dan waktu sholat — biar ibadah harian makin gampang.</p>
               <div className="mt-8 flex items-center gap-4">
                 {FEATURES.map((f, i) => (
@@ -310,7 +316,7 @@ function Project() {
             <span className="relative z-10 inline-block bg-rose px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 02</span>
             <div className="torn-bottom border-2 border-border bg-card p-8 shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">● Aplikasi Android</p>
-              <h3 className="mt-3 text-5xl font-bold">Note App</h3>
+              <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Note App</h3>
               <p className="mt-4 max-w-md font-hand text-2xl">mencatat note note ✎</p>
               <a href="https://github.com/IsTeqiyou/noteApp.git" target="_blank" rel="noreferrer"
                 className="mt-6 inline-block border-b-2 border-rose pb-1 font-mono text-xs uppercase tracking-widest text-rose transition-all hover:tracking-[0.3em]">Lihat Proyek ↗</a>
@@ -324,7 +330,7 @@ function Project() {
   );
 }
 
-function Contact() {
+function Contact({ onClose }: { onClose: () => void }) {
   const items = [
     { k: "Instagram", v: "@taaqydn", href: "https://instagram.com/taaqydn", c: "bg-rose text-primary-foreground", i: "◎" },
     { k: "Gmail", v: "muhtaqi009@gmail.com", href: "mailto:muhtaqi009@gmail.com", c: "bg-sun", i: "✉" },
@@ -348,13 +354,13 @@ function Contact() {
           ))}
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 overflow-hidden border-t-2 border-border bg-foreground py-3 text-primary-foreground">
-        <div className="marquee flex w-max gap-10 font-pixel text-sm">
-          {Array.from({ length: 2 }).flatMap((_, j) =>
-            ["Muhammad Taqiyuddin", "✦", "IT Programmer", "✦", "UI & UX", "✦", "Gamer", "✦", "Santri Abu Dzar", "✦"].map((t, i) => <span key={`${j}-${i}`}>{t}</span>),
-          )}
-        </div>
-      </div>
+      <button type="button" onClick={onClose}
+        className="book-cover reveal group relative mx-auto mt-20 flex w-full max-w-md flex-col items-center gap-2 rounded-r-2xl border-2 border-border px-8 py-10 text-primary-foreground shadow-hard transition-transform hover:-rotate-1">
+        <span className="absolute inset-y-0 left-0 w-4 rounded-l bg-foreground/40" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-sun">~ the end ~</span>
+        <span className="font-pixel text-2xl sm:text-3xl">Tutup Buku</span>
+        <span className="font-hand text-xl opacity-80">makasih udah mampir yaa ✦ klik buat balik ke cover</span>
+      </button>
     </section>
   );
 }
@@ -366,14 +372,19 @@ function Decor() {
     { cls: "torn-scrap bg-rose/40 left-[6%] top-[52%] h-20 w-32 rotate-3", d: "3s" },
     { cls: "torn-scrap bg-sky/30 right-[8%] top-[70%] h-24 w-44 -rotate-6", d: "2s" },
     { cls: "torn-scrap bg-ember/30 left-[45%] top-[88%] h-16 w-28 rotate-12", d: "4s" },
+    { cls: "torn-scrap bg-sky/25 left-[70%] top-[8%] h-20 w-32 rotate-12", d: "0.5s" },
+    { cls: "torn-scrap bg-sun/50 right-[30%] top-[45%] h-16 w-24 -rotate-3", d: "2.5s" },
+    { cls: "torn-scrap bg-mint/50 left-[20%] top-[63%] h-24 w-28 rotate-6", d: "3.5s" },
+    { cls: "torn-scrap bg-rose/30 right-[2%] top-[80%] h-20 w-36 -rotate-12", d: "1s" },
+    { cls: "torn-scrap bg-leaf/30 left-[1%] top-[95%] h-16 w-32 rotate-3", d: "4.5s" },
   ];
-  const doodles = ["✦", "✎", "☆", "✿", "✧", "⚡"];
+  const doodles = ["✦", "✎", "☆", "✧", "⚡", "♪", "✶", "◇", "☁", "✚", "○", "△", "✦", "⚡", "☆", "✎"];
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       {bits.map((b, i) => <span key={i} className={`drift absolute ${b.cls}`} style={{ animationDelay: b.d }} />)}
       {doodles.map((d, i) => (
-        <span key={i} className="drift absolute font-hand text-4xl text-muted-foreground/40"
-          style={{ left: `${(i * 37 + 10) % 90}%`, top: `${8 + i * 15}%`, animationDelay: `${i * 0.7}s` }}>{d}</span>
+        <span key={i} className={`${i % 2 ? "spin-drift" : "drift"} absolute font-hand text-3xl sm:text-4xl`} style2=""
+          style={{ left: `${(i * 37 + 10) % 92}%`, top: `${4 + i * 6}%`, animationDelay: `${i * 0.6}s` }}>{d}</span>
       ))}
     </div>
   );
