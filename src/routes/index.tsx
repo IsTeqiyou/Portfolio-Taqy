@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import me from "@/assets/me.jpg.asset.json";
 import mem1 from "@/assets/memory1.jpg.asset.json";
 import mem2 from "@/assets/memory2.jpg.asset.json";
@@ -383,15 +383,65 @@ function Decor() {
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       {bits.map((b, i) => <span key={i} className={`drift absolute ${b.cls}`} style={{ animationDelay: b.d }} />)}
       {doodles.map((d, i) => (
-        <span key={i} className={`${i % 2 ? "spin-drift" : "drift"} absolute font-hand text-3xl sm:text-4xl`} style2=""
+        <span key={i} className={`${i % 2 ? "spin-drift" : "drift"} absolute font-hand text-3xl sm:text-4xl text-muted-foreground/40`}
           style={{ left: `${(i * 37 + 10) % 92}%`, top: `${4 + i * 6}%`, animationDelay: `${i * 0.6}s` }}>{d}</span>
       ))}
     </div>
   );
 }
 
+function Lightbox() {
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => {
+    const on = (e: Event) => setSrc((e as CustomEvent<string>).detail);
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && setSrc(null);
+    window.addEventListener("zoom-photo", on);
+    window.addEventListener("keydown", esc);
+    return () => { window.removeEventListener("zoom-photo", on); window.removeEventListener("keydown", esc); };
+  }, []);
+  if (!src) return null;
+  return (
+    <div onClick={() => setSrc(null)} className="fixed inset-0 z-[90] grid cursor-zoom-out place-items-center bg-foreground/70 p-6 backdrop-blur-sm">
+      <figure className="zoom-in relative bg-card p-3 shadow-soft">
+        <img src={src} alt="Foto diperbesar" className="max-h-[75vh] max-w-[88vw] object-contain sm:max-w-[70vw]" />
+        <button type="button" aria-label="Tutup" className="absolute -top-4 -right-4 grid h-9 w-9 place-items-center rounded-full border-2 border-border bg-rose font-bold text-primary-foreground">✕</button>
+      </figure>
+    </div>
+  );
+}
+
+function Cover({ open, onOpen }: { open: boolean; onOpen: () => void }) {
+  const startY = useRef<number | null>(null);
+  useEffect(() => {
+    document.body.style.overflow = open ? "" : "hidden";
+    if (open) return;
+    const wheel = (e: WheelEvent) => e.deltaY > 20 && onOpen();
+    window.addEventListener("wheel", wheel);
+    return () => window.removeEventListener("wheel", wheel);
+  }, [open, onOpen]);
+  const down = (y: number) => { startY.current = y; };
+  const up = (y: number) => { if (startY.current !== null && startY.current - y > 50) onOpen(); startY.current = null; };
+  return (
+    <div aria-hidden={open}
+      onPointerDown={(e) => down(e.clientY)} onPointerUp={(e) => up(e.clientY)}
+      onTouchStart={(e) => down(e.touches[0].clientY)} onTouchEnd={(e) => up(e.changedTouches[0].clientY)}
+      className={`book-cover fixed inset-0 z-[80] flex touch-none select-none flex-col items-center justify-center px-6 text-center text-primary-foreground ${open ? "open pointer-events-none" : ""}`}>
+      <span className="absolute inset-y-0 left-0 w-6 bg-foreground/40 sm:w-10" />
+      <div className="relative border-4 border-double border-sun/70 px-8 py-12 sm:px-16 sm:py-16">
+        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-sun sm:text-xs">✦ vol. 01 ✦</p>
+        <h1 className="mt-4 font-pixel text-4xl leading-tight sm:text-6xl">Portfolio<br />Taqy</h1>
+        <p className="mx-auto mt-6 max-w-xs rotate-[-2deg] border-2 border-dashed border-rose bg-rose/20 px-4 py-2 font-hand text-xl sm:text-2xl">dilarang buka sebelum izin pemilik!</p>
+      </div>
+      <button type="button" onClick={onOpen} className="nudge mt-12 font-mono text-xs uppercase tracking-widest text-sun">↑ tarik ke atas buat buka ↑</button>
+    </div>
+  );
+}
+
 function Index() {
   useReveal();
+  const [open, setOpen] = useState(false);
+  const onOpen = useCallback(() => { setOpen(true); window.scrollTo({ top: 0 }); }, []);
+  const onClose = useCallback(() => { window.scrollTo({ top: 0, behavior: "smooth" }); setTimeout(() => setOpen(false), 500); }, []);
   return (
     <main className="relative">
       <Decor />
@@ -399,7 +449,9 @@ function Index() {
       <Hero />
       <About />
       <Project />
-      <Contact />
+      <Contact onClose={onClose} />
+      <Lightbox />
+      <Cover open={open} onOpen={onOpen} />
     </main>
   );
 }
