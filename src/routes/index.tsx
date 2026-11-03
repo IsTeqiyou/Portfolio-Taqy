@@ -427,7 +427,7 @@ function Cover({ open, onOpen }: { open: boolean; onOpen: () => void }) {
   return (
     <div aria-hidden={open}
       onPointerDown={(e) => down(e.clientY)} onPointerUp={(e) => up(e.clientY)}
-      onTouchStart={(e) => down(e.touches[0].clientY)} onTouchEnd={(e) => up(e.changedTouches[0].clientY)}
+      onTouchStart={(e) => down(e.touches[0]?.clientY ?? 0)} onTouchEnd={(e) => up(e.changedTouches[0]?.clientY ?? 0)}
       className={`book-cover fixed inset-0 z-[80] flex touch-none select-none flex-col items-center justify-center px-6 text-center text-primary-foreground ${open ? "open pointer-events-none" : ""}`}>
       <span className="absolute inset-y-0 left-0 w-6 bg-foreground/40 sm:w-10" />
       <div className="relative border-4 border-double border-sun/70 px-8 py-12 sm:px-16 sm:py-16">
