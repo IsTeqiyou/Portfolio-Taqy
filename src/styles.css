@@ -142,3 +142,59 @@
     color: var(--color-foreground);
   }
 }
+
+:root {
+  --background: oklch(0.975 0.006 85);
+  --foreground: oklch(0.18 0.01 60);
+  --primary: oklch(0.18 0.01 60);
+  --primary-foreground: oklch(0.975 0.006 85);
+  --muted-foreground: oklch(0.45 0.01 60);
+  --card: oklch(0.995 0.003 85);
+  --border: oklch(0.18 0.01 60);
+  --line: oklch(0.88 0.01 240 / 0.6);
+  --sun: oklch(0.86 0.15 90);
+  --mint: oklch(0.82 0.09 160);
+  --leaf: oklch(0.62 0.15 150);
+  --rose: oklch(0.68 0.2 0);
+  --sky: oklch(0.55 0.2 260);
+  --ember: oklch(0.65 0.19 35);
+  --tape: oklch(0.85 0.05 260 / 0.55);
+  --shadow-hard: 5px 5px 0 var(--foreground);
+  --shadow-soft: 0 30px 60px -20px oklch(0.18 0.01 60 / 0.45);
+}
+@theme inline {
+  --color-sun: var(--sun); --color-mint: var(--mint); --color-leaf: var(--leaf);
+  --color-rose: var(--rose); --color-sky: var(--sky); --color-ember: var(--ember);
+  --color-tape: var(--tape);
+  --font-pixel: "Silkscreen", monospace;
+  --font-hand: "Gaegu", cursive;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --shadow-hard: var(--shadow-hard);
+  --shadow-soft: var(--shadow-soft);
+}
+body { font-family: var(--font-sans); }
+html { scroll-behavior: smooth; }
+@utility paper {
+  background-color: var(--background);
+  background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--line) 31px 32px);
+}
+@utility tape {
+  position: absolute; width: 90px; height: 26px; background: var(--tape);
+  backdrop-filter: blur(2px);
+}
+.reveal { opacity: 0; transform: translateY(40px) scale(.98); filter: blur(6px);
+  transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter 1s; transition-delay: var(--d, 0ms); }
+.reveal.in { opacity: 1; transform: none; filter: none; }
+@keyframes floaty { 0%,100% { transform: translateY(0) rotate(var(--r,0deg)); } 50% { transform: translateY(-12px) rotate(var(--r,0deg)); } }
+.floaty { animation: floaty 5s ease-in-out infinite; }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 12s linear infinite; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.draw { stroke-dasharray: 1200; stroke-dashoffset: 1200; }
+.in .draw, .draw.in { animation: draw 2.2s ease forwards .4s; }
+@keyframes blink { 50% { opacity: 0; } }
+.blink { animation: blink 1s steps(1) infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee { animation: marquee 22s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity:1; transform:none; filter:none; } .floaty,.spin-slow,.marquee { animation:none; } }
