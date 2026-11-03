@@ -37,6 +37,40 @@ const NAV = [
   { id: "contact", label: "Kontak", icon: "✉" },
 ];
 
+const FEATURES = [
+  {
+    label: "Doa",
+    c: "bg-sun",
+    icon: (
+      <>
+        <path d="M12 6.4c-2-1.6-5-1.9-8-1v12c3-.9 6-.6 8 1 2-1.6 5-1.9 8-1v-12c-3-.9-6-.6-8 1z" />
+        <path d="M12 6.4v12" />
+      </>
+    ),
+  },
+  {
+    label: "Sholat",
+    c: "bg-mint",
+    icon: (
+      <>
+        <circle cx="12" cy="11" r="6.5" strokeDasharray="1.2 2.4" />
+        <path d="M12 17.5v2.2" />
+        <path d="M10.4 19.7h3.2" />
+      </>
+    ),
+  },
+  {
+    label: "Waktu",
+    c: "bg-rose",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="7.5" />
+        <path d="M12 7.8v4.6l3 1.9" />
+      </>
+    ),
+  },
+];
+
 function Header() {
   const [active, setActive] = useState("home");
   useEffect(() => {
@@ -110,8 +144,9 @@ function Hero() {
 
 function About() {
   const paras = [
-    "Time flies, nggak kerasa udah mau 6 tahun aja saya stay dan nyantri di Pondok Tahfizh Plus Abu Dzar, Bogor. Originally dari Bangka terus merantau ke Jawa, saya udah join dari zaman SMP as part of angkatan 1 — and fun fact, saya itu santri paling muda di angkatan. Rasanya baru kemarin struggle adaptasi, tahu-tahu sekarang udah kelas 12 aja.",
-    "Back then, saya sempat clueless banget dan bingung mau dibawa ke mana tujuan hidup ini. Tapi this long journey benar-benar changed my whole perspective. Nggak cuma fokus increasing hafalan Al-Qur'an dan deepening ilmu agama, saya juga belajar IT as an essential skill buat embrace era digital.",
+    "Hi there! Nama saya Muhammad Taqiyuddin, biasa dipanggil Taqy.",
+    "Time flies, nggak kerasa udah mau 6 tahun aja saya stay dan nyantri di Pondok Tahfizh Plus Abu Dzar, Bogor. Originally dari Bangka terus merantau ke Jawa, saya udah join dari zaman SMP as part of angkatan 1—and fun fact, saya itu santri paling muda di angkatan. Rasanya baru kemarin struggle adaptasi, tahu-tahu sekarang udah kelas 12 aja.",
+    "Back then, saya sempat clueless banget dan bingung mau dibawa ke mana tujuan hidup ini. Tapi this long journey benar-benar changed my whole perspective. Nggak cuma fokus increasing hafalan Alquran dan deepening ilmu agama, saya juga belajar IT as an essential skill buat embrace era digital.",
     "The vibe di pondok juga makin seru karena dikelilingi banyak teman seperjuangan. To blow off some steam dari rutinitas harian, saya biasanya suka play sports kayak futsal atau berenang bareng mereka.",
     "Right now, mendekati graduation, saya lagi in the process of applying ke perguruan tinggi swasta (PTS). With all the skills, hafalan, dan life experience selama di pondok, saya definitely ready and more confident buat melangkah ke jenjang kuliah!",
   ];
@@ -129,18 +164,13 @@ function About() {
         <p className="reveal font-hand text-2xl text-muted-foreground">tentang aku!</p>
         <h2 className="reveal mt-2 inline-block border-2 border-border bg-card px-5 py-2 font-pixel text-3xl shadow-hard sm:text-4xl">Siapa Saya?</h2>
         <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1fr_2fr_1fr]">
-          <Polaroid src={mem1.url} cap="kenangan #1" rot="-5deg" d="100ms" />
+          <Polaroid src={mem1.url} cap="sesi" rot="-5deg" d="100ms" />
           <div className="space-y-5 font-hand text-xl leading-relaxed sm:text-2xl">
             {paras.map((p, i) => (
-              <p key={i} className="reveal" style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>{p}</p>
+              <p key={i} className={`reveal ${i === 0 ? "text-2xl font-bold sm:text-3xl" : ""}`} style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>{p}</p>
             ))}
-            <div className="reveal flex flex-wrap gap-3 pt-4 font-sans text-sm">
-              {[["Hafalan Qur'an", "bg-leaf text-primary-foreground"], ["Programming", "bg-sun"], ["UI/UX", "bg-rose text-primary-foreground"], ["Futsal ⚽", "bg-sky text-primary-foreground"], ["Berenang 🏊", "bg-mint"]].map(([t, c]) => (
-                <span key={t} className={`${c} border-2 border-border px-3 py-1.5 shadow-hard transition-transform hover:-translate-y-1`}>{t}</span>
-              ))}
-            </div>
           </div>
-          <Polaroid src={mem2.url} cap="kenangan #2" rot="6deg" d="300ms" />
+          <Polaroid src={mem2.url} cap="potret" rot="6deg" d="300ms" />
         </div>
       </div>
     </section>
@@ -161,9 +191,14 @@ function Project() {
               <h3 className="mt-3 text-5xl font-bold">Qyqalb App</h3>
               <p className="mt-4 max-w-md opacity-80">Aplikasi kumpulan doa dan waktu sholat — biar ibadah harian makin gampang.</p>
               <div className="mt-8 flex items-center gap-4">
-                <span className="grid h-16 w-16 place-items-center rounded-2xl bg-sun text-3xl floaty">🕌</span>
-                <span className="grid h-16 w-16 place-items-center rounded-2xl bg-mint text-3xl floaty" style={{ animationDelay: ".8s" }}>📿</span>
-                <span className="grid h-16 w-16 place-items-center rounded-2xl bg-rose text-3xl floaty" style={{ animationDelay: "1.6s" }}>⏰</span>
+                {FEATURES.map((f, i) => (
+                  <span key={f.label} title={f.label} className={`floaty grid h-16 w-16 place-items-center rounded-xl border-2 border-border ${f.c} text-foreground`}
+                    style={{ animationDelay: `${i * 0.8}s` } as React.CSSProperties}>
+                    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      {f.icon}
+                    </svg>
+                  </span>
+                ))}
               </div>
               <a href="https://github.com/IsTeqiyou/Qyqalb_App.git" target="_blank" rel="noreferrer"
                 className="mt-8 inline-block border-b-2 border-sun pb-1 font-mono text-xs uppercase tracking-widest text-sun transition-all hover:tracking-[0.3em]">Lihat Proyek ↗</a>
@@ -173,7 +208,7 @@ function Project() {
             <span className="tape -top-3 left-6 rotate-[-8deg]" />
             <p className="font-pixel text-2xl leading-tight">Maaf guys yaa 🙏</p>
             <p className="mt-4 font-hand text-2xl leading-snug">
-              Di sini saya kasih satu aja. Kalau mau lihat lebih banyak lagi... hmmm, lumayan banyak kok, ada di GitHub aku yaa!
+              Di sini saya kasih satu aja. Kalau mau lihat lebih banyak lagi... hmm, nggak banyak sih, cuman lumayan aja. Ada di GitHub aku yaa!
             </p>
             <a href="https://github.com/IsTeqiyou" target="_blank" rel="noreferrer"
               className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 font-mono text-sm text-primary-foreground transition-transform hover:-translate-y-1">
