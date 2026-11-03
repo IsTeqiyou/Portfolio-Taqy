@@ -135,7 +135,10 @@ function Hero() {
           <div className="floaty relative" style={{ "--r": "-2deg" } as React.CSSProperties}>
             <img src={me.url} alt="Muhammad Taqiyuddin" className="relative w-full rounded-3xl border-2 border-border shadow-soft" />
           </div>
-          <span className="floaty absolute -top-6 -right-4 rotate-12 font-hand text-3xl text-rose" style={{ animationDelay: "1s" }}>✿ it's me!</span>
+          <span className="floaty absolute -top-6 -right-4 flex rotate-12 items-center gap-2 font-hand text-3xl text-rose" style={{ animationDelay: "1s" }}>
+            <svg viewBox="0 0 24 24" className="h-7 w-7 -rotate-6" fill="currentColor" aria-hidden="true"><path d="M13.6 1.8 4.2 13.4h5.4l-1.4 8.8 9.6-11.8h-5.6z" /></svg>
+            it's me!
+          </span>
         </div>
       </div>
     </section>
