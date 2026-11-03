@@ -3,6 +3,15 @@ import { useEffect, useState } from "react";
 import me from "@/assets/me.jpg.asset.json";
 import mem1 from "@/assets/memory1.jpg.asset.json";
 import mem2 from "@/assets/memory2.jpg.asset.json";
+import mem3 from "@/assets/memory3.jpg.asset.json";
+import mem4 from "@/assets/memory4.jpg.asset.json";
+import mem5 from "@/assets/memory5.jpg.asset.json";
+import mem6 from "@/assets/memory6.png.asset.json";
+import cert1 from "@/assets/cert1.jpg.asset.json";
+import cert2 from "@/assets/cert2.jpg.asset.json";
+import cert3 from "@/assets/cert3.jpg.asset.json";
+import cert4 from "@/assets/cert4.jpg.asset.json";
+import cert5 from "@/assets/cert5.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -91,8 +100,10 @@ function Header() {
             <span className="mr-1">{n.icon}</span><span className="hidden sm:inline">{n.label}</span>
           </a>
         ))}
-        <span className="mx-1 hidden gap-1 sm:flex">
-          <i className="h-3 w-3 rounded-full bg-sun" /><i className="h-3 w-3 rounded-full bg-rose" /><i className="h-3 w-3 rounded-full bg-leaf" />
+        <span className="mx-1 flex gap-1.5">
+          <button type="button" aria-label="Scroll ke bawah" title="Scroll ke bawah" onClick={() => window.scrollBy({ top: window.innerHeight * 0.8, behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-sun transition-transform hover:scale-150" />
+          <button type="button" aria-label="Scroll ke atas" title="Balik ke atas" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-rose transition-transform hover:scale-150" />
+          <button type="button" aria-label="Loncat ke kontak" title="Langsung ke kontak" onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-leaf transition-transform hover:scale-150" />
         </span>
       </nav>
     </header>
@@ -154,7 +165,7 @@ function About() {
     "Right now, mendekati graduation, saya lagi in the process of applying ke perguruan tinggi swasta (PTS). With all the skills, hafalan, dan life experience selama di pondok, saya definitely ready and more confident buat melangkah ke jenjang kuliah!",
   ];
   const Polaroid = ({ src, cap, rot, d }: { src: string; cap: string; rot: string; d: string }) => (
-    <figure className="reveal relative mx-auto w-56 bg-card p-3 pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
+    <figure className="reveal relative mx-auto w-full max-w-56 bg-card p-3 pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
       style={{ transform: `rotate(${rot})`, "--d": d } as React.CSSProperties}>
       <span className="tape -top-3 left-1/2 -translate-x-1/2 -rotate-3" />
       <img src={src} alt={cap} className="aspect-[3/4] w-full object-cover" loading="lazy" />
@@ -175,8 +186,85 @@ function About() {
           </div>
           <Polaroid src={mem2.url} cap="potret" rot="6deg" d="300ms" />
         </div>
+        <div className="mt-16 grid grid-cols-2 gap-10 md:grid-cols-4">
+          <Polaroid src={mem3.url} cap="yang" rot="-4deg" d="0ms" />
+          <Polaroid src={mem4.url} cap="selalu" rot="3deg" d="120ms" />
+          <Polaroid src={mem5.url} cap="kuuu" rot="-2deg" d="240ms" />
+          <Polaroid src={mem6.url} cap="benci" rot="5deg" d="360ms" />
+        </div>
       </div>
     </section>
+  );
+}
+
+const SKILLS = [
+  { n: "HTML & CSS", v: 90, c: "bg-ember" },
+  { n: "Tailwind CSS", v: 85, c: "bg-sky" },
+  { n: "JavaScript", v: 80, c: "bg-sun" },
+  { n: "React / Next.js", v: 75, c: "bg-mint" },
+  { n: "Figma UI & UX", v: 86, c: "bg-rose" },
+];
+
+function Skills() {
+  return (
+    <div className="mt-24">
+      <p className="reveal font-hand text-2xl text-muted-foreground">yang aku bisa ⚡</p>
+      <h2 className="reveal font-pixel text-4xl sm:text-5xl">Keahlian</h2>
+      <div className="reveal relative mt-8 -rotate-1 border-2 border-border bg-card p-6 shadow-hard sm:p-10">
+        <span className="tape -top-3 right-10 rotate-6" />
+        <div className="grid gap-6 md:grid-cols-2">
+          {SKILLS.map((k, i) => (
+            <div key={k.n}>
+              <div className="flex justify-between font-mono text-sm uppercase tracking-wider">
+                <span>{k.n}</span><span className="font-pixel">{k.v}%</span>
+              </div>
+              <div className="mt-2 h-5 border-2 border-border bg-background">
+                <div className={`skill-bar h-full ${k.c}`} style={{ "--w": `${k.v}%`, "--d": `${300 + i * 150}ms` } as React.CSSProperties} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const CERTS = [
+  { src: cert4.url, t: "Santri Teladan", s: "Kategori Santri Percontohan · 2022", icon: "★", c: "bg-sun" },
+  { src: cert2.url, t: "Pengampu Halaqoh", s: "Tahfizh & IT Bootcamp · 2022", icon: "⌨", c: "bg-sky text-primary-foreground" },
+  { src: cert5.url, t: "Liwaul Furqon Championship VI", s: "Peserta · Maret 2023", icon: "⚑", c: "bg-mint" },
+  { src: cert3.url, t: "Dauroh Tuhfathul Athfal", s: "Peserta · Ramadhan 1444 H", icon: "☾", c: "bg-rose text-primary-foreground" },
+  { src: cert1.url, t: "Ilqo Terbaik", s: "Certificate of Appreciation · 2024", icon: "♛", c: "bg-ember text-primary-foreground" },
+];
+
+function Certificates() {
+  const rots = ["-3deg", "2deg", "-1deg", "3deg", "-2deg"];
+  return (
+    <div className="mt-24">
+      <p className="reveal font-hand text-2xl text-muted-foreground">koleksi dari pondok 🏆</p>
+      <h2 className="reveal font-pixel text-4xl sm:text-5xl">Sertifikat</h2>
+      <p className="reveal mt-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">Pondok Tahfizh Plus Abu Dzar</p>
+      <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        {CERTS.map((c, i) => (
+          <figure key={c.t} className="reveal group relative" style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>
+            <div className="border-2 border-border bg-card p-3 shadow-hard transition-transform duration-500 group-hover:rotate-0 group-hover:-translate-y-2" style={{ transform: `rotate(${rots[i]})` }}>
+              <span className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2" />
+              <div className="overflow-hidden border-2 border-border">
+                <img src={c.src} alt={`Sertifikat ${c.t}`} loading="lazy" className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              </div>
+              <figcaption className="mt-3 flex items-start gap-3">
+                <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-border text-lg ${c.c}`}>{c.icon}</span>
+                <span>
+                  <span className="block font-bold leading-tight">{c.t}</span>
+                  <span className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{c.s}</span>
+                </span>
+              </figcaption>
+            </div>
+            <span className="stamp absolute -top-4 -right-3 grid h-14 w-14 rotate-12 place-items-center rounded-full border-2 border-dashed border-ember bg-background font-pixel text-[9px] text-ember">#{String(i + 1).padStart(2, "0")}</span>
+          </figure>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -207,18 +295,30 @@ function Project() {
                 className="mt-8 inline-block border-b-2 border-sun pb-1 font-mono text-xs uppercase tracking-widest text-sun transition-all hover:tracking-[0.3em]">Lihat Proyek ↗</a>
             </div>
           </article>
-          <div className="reveal relative rotate-2 border-2 border-border bg-sun p-8 shadow-hard" style={{ "--d": "350ms" } as React.CSSProperties}>
+          <div className="reveal relative rotate-2 border-2 border-border bg-sun p-8 shadow-hard md:row-span-2" style={{ "--d": "350ms" } as React.CSSProperties}>
             <span className="tape -top-3 left-6 rotate-[-8deg]" />
             <p className="font-pixel text-2xl leading-tight">Maaf guys yaa 🙏</p>
             <p className="mt-4 font-hand text-2xl leading-snug">
-              Di sini saya kasih satu aja. Kalau mau lihat lebih banyak lagi... hmm, nggak banyak sih, cuman lumayan aja. Ada di GitHub aku yaa!
+              Di sini aku kasih dua aja. Kalau mau lihat lebih banyak lagi... hmm, nggak banyak sih, cuman lumayan aja. Ada di GitHub aku yaa!
             </p>
             <a href="https://github.com/IsTeqiyou" target="_blank" rel="noreferrer"
               className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 font-mono text-sm text-primary-foreground transition-transform hover:-translate-y-1">
               ⌥ github.com/IsTeqiyou
             </a>
           </div>
+          <article className="reveal group relative md:-mt-4" style={{ "--d": "200ms" } as React.CSSProperties}>
+            <span className="relative z-10 inline-block bg-rose px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 02</span>
+            <div className="torn-bottom border-2 border-border bg-card p-8 shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">● Aplikasi Android</p>
+              <h3 className="mt-3 text-5xl font-bold">Note App</h3>
+              <p className="mt-4 max-w-md font-hand text-2xl">mencatat note note ✎</p>
+              <a href="https://github.com/IsTeqiyou/noteApp.git" target="_blank" rel="noreferrer"
+                className="mt-6 inline-block border-b-2 border-rose pb-1 font-mono text-xs uppercase tracking-widest text-rose transition-all hover:tracking-[0.3em]">Lihat Proyek ↗</a>
+            </div>
+          </article>
         </div>
+        <Skills />
+        <Certificates />
       </div>
     </section>
   );
@@ -228,20 +328,21 @@ function Contact() {
   const items = [
     { k: "Instagram", v: "@taaqydn", href: "https://instagram.com/taaqydn", c: "bg-rose text-primary-foreground", i: "◎" },
     { k: "Gmail", v: "muhtaqi009@gmail.com", href: "mailto:muhtaqi009@gmail.com", c: "bg-sun", i: "✉" },
+    { k: "Gmail Sekolah", v: "taqiyuddin2011@student.abudzar.sch.id", href: "mailto:taqiyuddin2011@student.abudzar.sch.id", c: "bg-mint", i: "✎" },
   ];
   return (
     <section id="contact" className="paper relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-28">
       <div className="mx-auto w-full max-w-5xl text-center">
         <p className="reveal font-hand text-2xl text-muted-foreground">yuk ngobrol!</p>
         <h2 className="reveal font-pixel text-5xl sm:text-7xl">Hubungi Saya</h2>
-        <div className="mt-14 grid gap-8 sm:grid-cols-2">
+        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((it, i) => (
             <a key={it.k} href={it.href} target="_blank" rel="noreferrer"
               className={`reveal group ${it.c} border-2 border-border p-8 text-left shadow-hard transition-all duration-300 hover:-translate-y-2 hover:rotate-[-1deg]`}
               style={{ "--d": `${i * 150}ms` } as React.CSSProperties}>
               <span className="text-4xl">{it.i}</span>
               <p className="mt-4 font-mono text-xs uppercase tracking-widest opacity-80">{it.k}</p>
-              <p className="mt-1 break-all text-2xl font-bold sm:text-3xl">{it.v}</p>
+              <p className="mt-1 break-all text-xl font-bold">{it.v}</p>
               <p className="mt-6 font-mono text-xs transition-all group-hover:tracking-widest">Kirim pesan →</p>
             </a>
           ))}
@@ -258,10 +359,31 @@ function Contact() {
   );
 }
 
+function Decor() {
+  const bits = [
+    { cls: "torn-scrap bg-sun/70 left-[3%] top-[18%] h-24 w-40 -rotate-12", d: "0s" },
+    { cls: "torn-scrap bg-mint/70 right-[4%] top-[34%] h-28 w-36 rotate-6", d: "1.5s" },
+    { cls: "torn-scrap bg-rose/40 left-[6%] top-[52%] h-20 w-32 rotate-3", d: "3s" },
+    { cls: "torn-scrap bg-sky/30 right-[8%] top-[70%] h-24 w-44 -rotate-6", d: "2s" },
+    { cls: "torn-scrap bg-ember/30 left-[45%] top-[88%] h-16 w-28 rotate-12", d: "4s" },
+  ];
+  const doodles = ["✦", "✎", "☆", "✿", "✧", "⚡"];
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      {bits.map((b, i) => <span key={i} className={`drift absolute ${b.cls}`} style={{ animationDelay: b.d }} />)}
+      {doodles.map((d, i) => (
+        <span key={i} className="drift absolute font-hand text-4xl text-muted-foreground/40"
+          style={{ left: `${(i * 37 + 10) % 90}%`, top: `${8 + i * 15}%`, animationDelay: `${i * 0.7}s` }}>{d}</span>
+      ))}
+    </div>
+  );
+}
+
 function Index() {
   useReveal();
   return (
-    <main>
+    <main className="relative">
+      <Decor />
       <Header />
       <Hero />
       <About />
