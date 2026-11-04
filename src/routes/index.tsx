@@ -161,10 +161,10 @@ function Hero() {
 
 function Polaroid({ src, cap, rot, d, fit }: { src: string; cap: string; rot: string; d: string; fit?: boolean }) {
   return (
-    <figure onClick={() => zoom(src)} className="reveal relative mx-auto w-full max-w-56 cursor-zoom-in bg-card p-2 pb-8 sm:p-3 sm:pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
+    <figure onClick={() => zoom(src)} className="reveal relative w-full cursor-zoom-in bg-card p-2 pb-8 sm:p-3 sm:pb-10 shadow-soft transition-transform duration-500 hover:rotate-0 hover:scale-105"
       style={{ transform: `rotate(${rot})`, "--d": d } as React.CSSProperties}>
       <span className="tape -top-3 left-1/2 -translate-x-1/2 -rotate-3" />
-      <img src={src} alt={cap} className={`aspect-[3/4] w-full bg-foreground/90 ${fit ? "object-contain" : "object-cover"}`} loading="lazy" />
+      <img src={src} alt={cap} className={`aspect-square w-full bg-foreground/90 ${fit ? "object-contain" : "object-cover"}`} loading="lazy" />
       <figcaption className="absolute bottom-2 inset-x-0 text-center font-hand text-base sm:text-lg">{cap}</figcaption>
     </figure>
   );
@@ -183,21 +183,19 @@ function About() {
       <div className="mx-auto max-w-6xl">
         <p className="reveal font-hand text-2xl text-muted-foreground">tentang aku!</p>
         <h2 className="reveal mt-2 inline-block border-2 border-border bg-card px-5 py-2 font-pixel text-3xl shadow-hard sm:text-4xl">Siapa Saya?</h2>
-        <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1fr_2fr_1fr]">
-          <div className="grid grid-cols-3 gap-4 lg:grid-cols-1 lg:gap-10">
-            <Polaroid src={mem1.url} cap="sesi" rot="-5deg" d="100ms" />
-            <Polaroid src={mem3.url} cap="yang" rot="4deg" d="200ms" />
-            <Polaroid src={mem4b.url} cap="selalu" rot="-3deg" d="300ms" fit />
-          </div>
-          <div className="order-first space-y-5 font-hand lg:order-none text-xl leading-relaxed sm:text-2xl">
+        <div className="mt-12 grid items-start gap-12 lg:grid-cols-2">
+          <div className="space-y-5 font-hand text-xl leading-relaxed sm:text-2xl">
             {paras.map((p, i) => (
               <p key={i} className={`reveal ${i === 0 ? "text-2xl font-bold sm:text-3xl" : ""}`} style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>{p}</p>
             ))}
           </div>
-          <div className="grid grid-cols-3 gap-4 lg:grid-cols-1 lg:gap-10">
-            <Polaroid src={mem2.url} cap="potret" rot="6deg" d="150ms" />
-            <Polaroid src={mem5.url} cap="kuuu" rot="-4deg" d="250ms" />
-            <Polaroid src={mem6.url} cap="benci" rot="3deg" d="350ms" fit />
+          <div className="grid grid-cols-2 gap-4 sm:gap-8">
+            <Polaroid src={mem1.url} cap="sesi" rot="-3deg" d="100ms" />
+            <Polaroid src={mem2.url} cap="potret" rot="3deg" d="150ms" />
+            <Polaroid src={mem3.url} cap="yang" rot="2deg" d="200ms" />
+            <Polaroid src={mem4b.url} cap="selalu" rot="-2deg" d="250ms" />
+            <Polaroid src={mem5.url} cap="kuuu" rot="-3deg" d="300ms" />
+            <Polaroid src={mem6.url} cap="benci" rot="2deg" d="350ms" />
           </div>
         </div>
       </div>
@@ -286,7 +284,7 @@ function Project() {
         <div className="mt-12 grid items-center gap-10 md:grid-cols-[3fr_2fr]">
           <article className="reveal group relative" style={{ "--d": "150ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-sky px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 01</span>
-            <div className="torn-bottom border-2 border-border bg-foreground p-6 pb-12 text-primary-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="cardboard torn-bottom border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest opacity-70">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Qyqalb App</h3>
               <p className="mt-4 max-w-md opacity-80">Aplikasi kumpulan doa dan waktu sholat — biar ibadah harian makin gampang.</p>
@@ -415,25 +413,30 @@ function Lightbox() {
 
 function Cover({ open, onOpen }: { open: boolean; onOpen: () => void }) {
   const startY = useRef<number | null>(null);
+  const [drag, setDrag] = useState(0);
   useEffect(() => {
     document.body.style.overflow = open ? "" : "hidden";
     if (open) return;
-    const wheel = (e: WheelEvent) => e.deltaY > 20 && onOpen();
-    window.addEventListener("wheel", wheel);
+    const wheel = (e: WheelEvent) => e.deltaY > 5 && onOpen();
+    window.addEventListener("wheel", wheel, { passive: true });
     return () => window.removeEventListener("wheel", wheel);
   }, [open, onOpen]);
   const down = (y: number) => { startY.current = y; };
-  const up = (y: number) => { if (startY.current !== null && startY.current - y > 50) onOpen(); startY.current = null; };
+  const move = (y: number) => { if (startY.current !== null) setDrag(Math.max(0, startY.current - y)); };
+  const up = (y: number) => {
+    if (startY.current !== null && startY.current - y > 30) onOpen();
+    startY.current = null; setDrag(0);
+  };
   return (
     <div aria-hidden={open}
-      onPointerDown={(e) => down(e.clientY)} onPointerUp={(e) => up(e.clientY)}
-      onTouchStart={(e) => down(e.touches[0]?.clientY ?? 0)} onTouchEnd={(e) => up(e.changedTouches[0]?.clientY ?? 0)}
+      onPointerDown={(e) => down(e.clientY)} onPointerMove={(e) => move(e.clientY)} onPointerUp={(e) => up(e.clientY)}
+      onTouchStart={(e) => down(e.touches[0]?.clientY ?? 0)} onTouchMove={(e) => move(e.touches[0]?.clientY ?? 0)} onTouchEnd={(e) => up(e.changedTouches[0]?.clientY ?? 0)}
+      style={drag && !open ? { transform: `translateY(${-drag}px)`, transition: "none" } : undefined}
       className={`book-cover fixed inset-0 z-[80] flex touch-none select-none flex-col items-center justify-center px-6 text-center text-primary-foreground ${open ? "open pointer-events-none" : ""}`}>
       <span className="absolute inset-y-0 left-0 w-6 bg-foreground/40 sm:w-10" />
       <div className="relative border-4 border-double border-sun/70 px-8 py-12 sm:px-16 sm:py-16">
         <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-sun sm:text-xs">✦ vol. 01 ✦</p>
         <h1 className="mt-4 font-pixel text-4xl leading-tight sm:text-6xl">Portfolio<br />Taqy</h1>
-        <p className="mx-auto mt-6 max-w-xs rotate-[-2deg] border-2 border-dashed border-rose bg-rose/20 px-4 py-2 font-hand text-xl sm:text-2xl">dilarang buka sebelum izin pemilik!</p>
       </div>
       <button type="button" onClick={onOpen} className="nudge mt-12 font-mono text-xs uppercase tracking-widest text-sun">↑ tarik ke atas buat buka ↑</button>
     </div>
