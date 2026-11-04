@@ -147,7 +147,7 @@ function Hero() {
           <div className="absolute inset-0 translate-x-6 translate-y-6 -rotate-3 rounded-3xl bg-foreground/85 blur-[2px]" />
           <div className="absolute inset-0 -translate-x-4 translate-y-3 rotate-6 rounded-3xl bg-sun" />
           <div className="floaty relative" style={{ "--r": "-2deg" } as React.CSSProperties}>
-            <img src={me.url} alt="Muhammad Taqiyuddin" onClick={() => zoom(me.url)} className="relative w-full cursor-zoom-in rounded-3xl border-2 border-border shadow-soft" />
+            <img src={me} alt="Muhammad Taqiyuddin" onClick={() => zoom(me)} className="relative w-full cursor-zoom-in rounded-3xl border-2 border-border shadow-soft" />
           </div>
           <span className="floaty absolute -top-6 -right-4 flex rotate-12 items-center gap-2 font-hand text-3xl text-rose" style={{ animationDelay: "1s" }}>
             <svg viewBox="0 0 24 24" className="h-7 w-7 -rotate-6" fill="currentColor" aria-hidden="true"><path d="M13.6 1.8 4.2 13.4h5.4l-1.4 8.8 9.6-11.8h-5.6z" /></svg>
@@ -190,12 +190,12 @@ function About() {
             ))}
           </div>
           <div className="grid grid-cols-2 gap-4 sm:gap-8">
-            <Polaroid src={mem1.url} cap="sesi" rot="-3deg" d="100ms" />
-            <Polaroid src={mem2.url} cap="potret" rot="3deg" d="150ms" />
-            <Polaroid src={mem3.url} cap="yang" rot="2deg" d="200ms" />
-            <Polaroid src={mem4b.url} cap="selalu" rot="-2deg" d="250ms" />
-            <Polaroid src={mem5.url} cap="kuuu" rot="-3deg" d="300ms" />
-            <Polaroid src={mem6.url} cap="benci" rot="2deg" d="350ms" />
+            <Polaroid src={mem1} cap="sesi" rot="-3deg" d="100ms" />
+            <Polaroid src={mem2} cap="potret" rot="3deg" d="150ms" />
+            <Polaroid src={mem3} cap="yang" rot="2deg" d="200ms" />
+            <Polaroid src={mem4b} cap="selalu" rot="-2deg" d="250ms" />
+            <Polaroid src={mem5} cap="kuuu" rot="-3deg" d="300ms" />
+            <Polaroid src={mem6} cap="benci" rot="2deg" d="350ms" />
           </div>
         </div>
       </div>
@@ -236,12 +236,12 @@ function Skills() {
 }
 
 const CERTS = [
-  { src: cert4.url, t: "Santri Teladan", s: "Kategori Santri Percontohan · 2022", icon: "★", c: "bg-sun" },
-  { src: cert2.url, t: "Pengampu Halaqoh", s: "Tahfizh & IT Bootcamp · 2022", icon: "⌨", c: "bg-sky text-primary-foreground" },
-  { src: cert5.url, t: "Liwaul Furqon Championship VI", s: "Peserta · Maret 2023", icon: "⚑", c: "bg-mint" },
-  { src: cert3.url, t: "Dauroh Tuhfathul Athfal", s: "Peserta · Ramadhan 1444 H", icon: "☾", c: "bg-rose text-primary-foreground" },
-  { src: cert6.url, t: "Front-End Web untuk Pemula", s: "Dicoding Academy · Nov 2024", icon: "</>", c: "bg-sky text-primary-foreground" },
-  { src: cert1.url, t: "Ilqo Terbaik", s: "Certificate of Appreciation · 2024", icon: "♛", c: "bg-ember text-primary-foreground" },
+  { src: cert4, t: "Santri Teladan", s: "Kategori Santri Percontohan · 2022", icon: "★", c: "bg-sun" },
+  { src: cert2, t: "Pengampu Halaqoh", s: "Tahfizh & IT Bootcamp · 2022", icon: "⌨", c: "bg-sky text-primary-foreground" },
+  { src: cert5, t: "Liwaul Furqon Championship VI", s: "Peserta · Maret 2023", icon: "⚑", c: "bg-mint" },
+  { src: cert3, t: "Dauroh Tuhfathul Athfal", s: "Peserta · Ramadhan 1444 H", icon: "☾", c: "bg-rose text-primary-foreground" },
+  { src: cert6, t: "Front-End Web untuk Pemula", s: "Dicoding Academy · Nov 2024", icon: "</>", c: "bg-sky text-primary-foreground" },
+  { src: cert1, t: "Ilqo Terbaik", s: "Certificate of Appreciation · 2024", icon: "♛", c: "bg-ember text-primary-foreground" },
 ];
 
 function Certificates() {
