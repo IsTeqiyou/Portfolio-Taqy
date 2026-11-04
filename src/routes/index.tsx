@@ -1,18 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import me from "@/assets/me.jpg.asset.json";
-import mem1 from "@/assets/memory1.jpg.asset.json";
-import mem2 from "@/assets/memory2.jpg.asset.json";
-import mem3 from "@/assets/memory3.jpg.asset.json";
-import mem5 from "@/assets/memory5.jpg.asset.json";
-import mem6 from "@/assets/memory6.png.asset.json";
-import cert1 from "@/assets/cert1.jpg.asset.json";
-import cert2 from "@/assets/cert2.jpg.asset.json";
-import cert3 from "@/assets/cert3.jpg.asset.json";
-import cert4 from "@/assets/cert4.jpg.asset.json";
-import cert5 from "@/assets/cert5.jpg.asset.json";
-import cert6 from "@/assets/cert6.png.asset.json";
-import mem4b from "@/assets/memory4b.jpg.asset.json";
+import me from "@/assets/me.jpg";
+import mem1 from "@/assets/memory1.jpg";
+import mem2 from "@/assets/memory2.jpg";
+import mem3 from "@/assets/memory3.jpg";
+import mem5 from "@/assets/memory5.jpg";
+import mem6 from "@/assets/memory6.png";
+import cert1 from "@/assets/cert1.jpg";
+import cert2 from "@/assets/cert2.jpg";
+import cert3 from "@/assets/cert3.jpg";
+import cert4 from "@/assets/cert4.jpg";
+import cert5 from "@/assets/cert5.jpg";
+import cert6 from "@/assets/cert6.png";
+import mem4b from "@/assets/memory4b.jpg";
 
 const zoom = (src: string) => window.dispatchEvent(new CustomEvent("zoom-photo", { detail: src }));
 
