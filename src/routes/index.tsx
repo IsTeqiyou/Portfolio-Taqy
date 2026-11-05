@@ -503,7 +503,7 @@ function Cover({ open, onOpen: rawOpen }: { open: boolean; onOpen: () => void })
       <span className="floaty absolute left-[14%] top-[14%] rotate-[-12deg] bg-sun px-3 py-1 font-hand text-xl text-foreground shadow-hard">jangan diintip! 🤫</span>
       <span className="floaty absolute right-[10%] top-[22%] grid h-20 w-20 rotate-12 place-items-center rounded-full border-2 border-dashed border-rose bg-rose/20 font-pixel text-[10px] uppercase leading-tight text-sun" style={{ animationDelay: "1s" }}>top<br />secret</span>
       <span className="floaty absolute bottom-[18%] left-[12%] text-5xl" style={{ animationDelay: "2s" }}>📎</span>
-      <span className="floaty absolute bottom-[22%] right-[14%] rotate-6 bg-mint px-3 py-1 font-mono text-xs text-foreground shadow-hard" style={{ animationDelay: "1.5s" }}>⚡ est. 2011</span>
+      <span className="floaty absolute bottom-[22%] right-[14%] rotate-6 bg-mint px-3 py-1 font-mono text-xs text-foreground shadow-hard" style={{ animationDelay: "1.5s" }}>⚡ handle with care</span>
       <span className="spin-drift absolute right-[30%] bottom-[10%] text-3xl text-sun/60">✦</span>
       <span className="spin-drift absolute left-[30%] top-[8%] text-2xl text-sun/50">☆</span>
       <div className="relative border-4 border-double border-sun/70 px-8 py-12 sm:px-16 sm:py-16">
