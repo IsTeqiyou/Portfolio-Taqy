@@ -240,5 +240,13 @@ main { background-color: var(--background); background-image: repeating-linear-g
   box-shadow: -2px 2px 4px oklch(0 0 0 / .12); }
 .origami-a { --ori: oklch(0.8 0.12 160); }
 .origami-b { --ori: oklch(0.82 0.11 20); }
+@keyframes burst { 0% { transform: translate(-50%,-50%) scale(.3); opacity: 1; } 100% { transform: translate(calc(-50% + var(--dx)), -140px) scale(1.3) rotate(40deg); opacity: 0; } }
+.burst { animation: burst .9s ease-out forwards; }
+.peeker { transform: translateY(110%); transition: transform .5s cubic-bezier(.34,1.8,.64,1); }
+.peeker.up { transform: translateY(15%); }
+@keyframes jelly { 0%,100% { transform: scale(1,1); } 30% { transform: scale(1.15,.85); } 50% { transform: scale(.9,1.1); } 70% { transform: scale(1.05,.95); } }
+h2.font-pixel:hover, h3:hover { animation: jelly .6s; display: inline-block; }
+@keyframes shake { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-6deg) scale(1.05); } 75% { transform: rotate(6deg) scale(1.05); } }
+.shadow-hard:hover { animation: shake .4s; }
 @keyframes nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .nudge { animation: nudge 1.6s ease-in-out infinite; }

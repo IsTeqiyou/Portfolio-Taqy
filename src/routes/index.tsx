@@ -415,7 +415,65 @@ function Lightbox() {
   );
 }
 
-function Cover({ open, onOpen }: { open: boolean; onOpen: () => void }) {
+function playPaper() {
+  try {
+    const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx();
+    const dur = 0.7;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) {
+      const t = i / d.length;
+      const crackle = Math.random() < 0.02 ? 3 : 1;
+      d[i] = (Math.random() * 2 - 1) * crackle * Math.pow(Math.sin(Math.PI * t), 0.6) * (0.6 + 0.4 * Math.sin(t * 40));
+    }
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 2400; bp.Q.value = 0.7;
+    bp.frequency.linearRampToValueAtTime(900, ctx.currentTime + dur);
+    const g = ctx.createGain(); g.gain.value = 0.35;
+    src.connect(bp).connect(g).connect(ctx.destination);
+    src.start(); src.onended = () => ctx.close();
+  } catch { /* audio not supported */ }
+}
+
+const POP = ["😂", "🤣", "👀", "💥", "🐸", "🙀", "✨", "🔥", "🤪"];
+function ClickBurst() {
+  const [bits, setBits] = useState<{ id: number; x: number; y: number; e: string; dx: number }[]>([]);
+  useEffect(() => {
+    let id = 0;
+    const on = (ev: MouseEvent) => {
+      const add = Array.from({ length: 5 }, () => ({ id: id++, x: ev.clientX, y: ev.clientY, e: POP[Math.floor(Math.random() * POP.length)], dx: Math.random() * 160 - 80 }));
+      setBits((b) => [...b, ...add]);
+      setTimeout(() => setBits((b) => b.filter((x) => !add.includes(x))), 900);
+    };
+    window.addEventListener("click", on);
+    return () => window.removeEventListener("click", on);
+  }, []);
+  return (
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[95]">
+      {bits.map((b) => (
+        <span key={b.id} className="burst absolute text-2xl" style={{ left: b.x, top: b.y, "--dx": `${b.dx}px` } as React.CSSProperties}>{b.e}</span>
+      ))}
+    </div>
+  );
+}
+
+function Peeker() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const t = setInterval(() => { setShow(true); setTimeout(() => setShow(false), 2200); }, 9000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div aria-hidden="true" className={`peeker pointer-events-none fixed bottom-0 right-6 z-[70] text-6xl ${show ? "up" : ""}`}>
+      <span className="absolute -top-10 right-10 whitespace-nowrap rounded-full border-2 border-border bg-card px-3 py-1 font-hand text-xl text-foreground">ciluk ba! 👋</span>
+      🙈
+    </div>
+  );
+}
+
+function Cover({ open, onOpen: rawOpen }: { open: boolean; onOpen: () => void }) {
+  const onOpen = useCallback(() => { playPaper(); rawOpen(); }, [rawOpen]);
   const startY = useRef<number | null>(null);
   const [drag, setDrag] = useState(0);
   useEffect(() => {
@@ -438,6 +496,16 @@ function Cover({ open, onOpen }: { open: boolean; onOpen: () => void }) {
       style={drag && !open ? { transform: `translateY(${-drag}px)`, transition: "none" } : undefined}
       className={`book-cover fixed inset-0 z-[80] flex touch-none select-none flex-col items-center justify-center px-6 text-center text-primary-foreground ${open ? "open pointer-events-none" : ""}`}>
       <span className="absolute inset-y-0 left-0 w-6 bg-foreground/40 sm:w-10" />
+      <span className="absolute inset-y-0 left-8 w-px border-l border-dashed border-sun/40 sm:left-14" />
+      {["left-10 top-6 sm:left-16", "right-6 top-6", "left-10 bottom-6 sm:left-16", "right-6 bottom-6"].map((p, i) => (
+        <span key={p} className={`absolute ${p} h-10 w-10 border-sun/60 ${["border-t-2 border-l-2", "border-t-2 border-r-2", "border-b-2 border-l-2", "border-b-2 border-r-2"][i]}`} />
+      ))}
+      <span className="floaty absolute left-[14%] top-[14%] rotate-[-12deg] bg-sun px-3 py-1 font-hand text-xl text-foreground shadow-hard">jangan diintip! 🤫</span>
+      <span className="floaty absolute right-[10%] top-[22%] grid h-20 w-20 rotate-12 place-items-center rounded-full border-2 border-dashed border-rose bg-rose/20 font-pixel text-[10px] uppercase leading-tight text-sun" style={{ animationDelay: "1s" }}>top<br />secret</span>
+      <span className="floaty absolute bottom-[18%] left-[12%] text-5xl" style={{ animationDelay: "2s" }}>📎</span>
+      <span className="floaty absolute bottom-[22%] right-[14%] rotate-6 bg-mint px-3 py-1 font-mono text-xs text-foreground shadow-hard" style={{ animationDelay: "1.5s" }}>⚡ est. 2011</span>
+      <span className="spin-drift absolute right-[30%] bottom-[10%] text-3xl text-sun/60">✦</span>
+      <span className="spin-drift absolute left-[30%] top-[8%] text-2xl text-sun/50">☆</span>
       <div className="relative border-4 border-double border-sun/70 px-8 py-12 sm:px-16 sm:py-16">
         <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-sun sm:text-xs">✦ vol. 01 ✦</p>
         <h1 className="mt-4 font-pixel text-4xl leading-tight sm:text-6xl">Portfolio<br />Taqy</h1>
@@ -461,6 +529,8 @@ function Index() {
       <Project />
       <Contact onClose={onClose} />
       <Lightbox />
+      {open && <Peeker />}
+      <ClickBurst />
       <Cover open={open} onOpen={onOpen} />
     </main>
   );
