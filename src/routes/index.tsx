@@ -442,7 +442,7 @@ function ClickBurst() {
   useEffect(() => {
     let id = 0;
     const on = (ev: MouseEvent) => {
-      const add = Array.from({ length: 5 }, () => ({ id: id++, x: ev.clientX, y: ev.clientY, e: POP[Math.floor(Math.random() * POP.length)], dx: Math.random() * 160 - 80 }));
+      const add = Array.from({ length: 5 }, () => ({ id: id++, x: ev.clientX, y: ev.clientY, e: POP[Math.floor(Math.random() * POP.length)] ?? "✨", dx: Math.random() * 160 - 80 }));
       setBits((b) => [...b, ...add]);
       setTimeout(() => setBits((b) => b.filter((x) => !add.includes(x))), 900);
     };
