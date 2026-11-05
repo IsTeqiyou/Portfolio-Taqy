@@ -194,7 +194,7 @@ function About() {
             <Polaroid src={mem2} cap="potret" rot="3deg" d="150ms" />
             <Polaroid src={mem3} cap="yang" rot="2deg" d="200ms" />
             <Polaroid src={mem4b} cap="selalu" rot="-2deg" d="250ms" />
-            <Polaroid src={mem5} cap="kuuu" rot="-3deg" d="300ms" />
+            <Polaroid src={mem5} cap="ku" rot="-3deg" d="300ms" />
             <Polaroid src={mem6} cap="benci" rot="2deg" d="350ms" />
           </div>
         </div>
@@ -284,7 +284,7 @@ function Project() {
         <div className="mt-12 grid items-center gap-10 md:grid-cols-[3fr_2fr]">
           <article className="reveal group relative" style={{ "--d": "150ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-sky px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 01</span>
-            <div className="cardboard torn-bottom border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="origami origami-a torn-bottom border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest opacity-70">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Qyqalb App</h3>
               <p className="mt-4 max-w-md opacity-80">Aplikasi kumpulan doa dan waktu sholat — biar ibadah harian makin gampang.</p>
@@ -315,7 +315,7 @@ function Project() {
           </div>
           <article className="reveal group relative md:-mt-4" style={{ "--d": "200ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-rose px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 02</span>
-            <div className="torn-bottom border-2 border-border bg-card p-8 shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="origami origami-b torn-bottom border-2 border-border p-8 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Note App</h3>
               <p className="mt-4 max-w-md font-hand text-2xl">mencatat note note ✎</p>
@@ -360,7 +360,11 @@ function Contact({ onClose }: { onClose: () => void }) {
         <span className="absolute inset-y-0 left-0 w-4 rounded-l bg-foreground/40" />
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-sun">~ the end ~</span>
         <span className="font-pixel text-2xl sm:text-3xl">Tutup Buku</span>
-        <span className="font-hand text-xl opacity-80">makasih udah mampir yaa ✦ klik buat balik ke cover</span>
+        <span className="flex flex-col items-center text-center font-hand text-xl leading-snug opacity-80">
+          <span>makasih udah mampir yaa</span>
+          <span className="text-sun">✦</span>
+          <span>klik buat balik ke cover</span>
+        </span>
       </button>
     </section>
   );
