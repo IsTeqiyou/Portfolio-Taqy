@@ -265,9 +265,9 @@ function Certificates() {
       <p className="reveal font-hand text-2xl text-muted-foreground">koleksi dari pondok 🏆</p>
       <h2 className="reveal font-pixel text-4xl sm:text-5xl">Sertifikat</h2>
       <p className="reveal mt-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">Pondok Tahfizh Plus Abu Dzar</p>
-      <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
         {CERTS.map((c, i) => (
-          <figure key={c.t} className={`reveal group relative ${i === CERTS.length - 2 ? "lg:col-start-2" : ""}`} style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>
+          <figure key={c.t} className={`reveal group relative lg:col-span-2 ${i === CERTS.length - 2 ? "lg:col-start-2" : ""}`} style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>
             <div className="border-2 border-border bg-card p-3 shadow-hard transition-transform duration-500 group-hover:rotate-0 group-hover:-translate-y-2" style={{ transform: `rotate(${rots[i]})` }}>
               <span className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2" />
               <div onClick={() => zoom(c.src)} className="cursor-zoom-in overflow-hidden border-2 border-border">
