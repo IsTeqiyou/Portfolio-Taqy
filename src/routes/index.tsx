@@ -12,6 +12,8 @@ import cert3 from "@/assets/cert3.jpg";
 import cert4 from "@/assets/cert4.jpg";
 import cert5 from "@/assets/cert5.jpg";
 import cert6 from "@/assets/cert6.png";
+import cert7 from "@/assets/cert7.jpg";
+import cert8 from "@/assets/cert8.jpg";
 import mem4b from "@/assets/memory4b.jpg";
 
 const zoom = (src: string) => window.dispatchEvent(new CustomEvent("zoom-photo", { detail: src }));
@@ -252,10 +254,12 @@ const CERTS = [
   { src: cert3, t: "Dauroh Tuhfathul Athfal", s: "Peserta · Ramadhan 1444 H", icon: "☾", c: "bg-rose text-primary-foreground" },
   { src: cert6, t: "Front-End Web untuk Pemula", s: "Dicoding Academy · Nov 2024", icon: "</>", c: "bg-sky text-primary-foreground" },
   { src: cert1, t: "Ilqo Terbaik", s: "Certificate of Appreciation · 2024", icon: "♛", c: "bg-ember text-primary-foreground" },
+  { src: cert7, t: "Challenge T-Shirt Design", s: "Juara 2 · Challenge Game Creator & T-Shirt Design", icon: "✎", c: "bg-mint" },
+  { src: cert8, t: "React JS", s: "Lulus Nilai Cukup · IT Kelas 10 · 2024/2025", icon: "⚛", c: "bg-sky text-primary-foreground" },
 ];
 
 function Certificates() {
-  const rots = ["-3deg", "2deg", "-1deg", "3deg", "-2deg", "1deg"];
+  const rots = ["-3deg", "2deg", "-1deg", "3deg", "-2deg", "1deg", "-2deg", "3deg"];
   return (
     <div className="mt-24">
       <p className="reveal font-hand text-2xl text-muted-foreground">koleksi dari pondok 🏆</p>
@@ -263,7 +267,7 @@ function Certificates() {
       <p className="reveal mt-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">Pondok Tahfizh Plus Abu Dzar</p>
       <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
         {CERTS.map((c, i) => (
-          <figure key={c.t} className="reveal group relative" style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>
+          <figure key={c.t} className={`reveal group relative ${i === CERTS.length - 2 ? "lg:col-start-2" : ""}`} style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>
             <div className="border-2 border-border bg-card p-3 shadow-hard transition-transform duration-500 group-hover:rotate-0 group-hover:-translate-y-2" style={{ transform: `rotate(${rots[i]})` }}>
               <span className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2" />
               <div onClick={() => zoom(c.src)} className="cursor-zoom-in overflow-hidden border-2 border-border">
