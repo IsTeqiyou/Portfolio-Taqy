@@ -212,24 +212,33 @@ const SKILLS = [
   { n: "Figma UI & UX", v: 86, c: "bg-rose" },
 ];
 
+function SkillRow({ k, i }: { k: (typeof SKILLS)[number]; i: number }) {
+  const [st, setSt] = useState<"idle" | "err" | "ok">("idle");
+  const go = () => { if (st !== "idle") return; setSt("err"); setTimeout(() => setSt("ok"), 900); };
+  return (
+    <div onMouseEnter={go} onClick={go} className="cursor-help">
+      <div className="flex justify-between font-mono text-sm uppercase tracking-wider">
+        <span>{k.n}</span>
+        <span className={`font-pixel ${st === "err" ? "glitch text-destructive" : ""}`}>{st === "ok" ? `${k.v}%` : st === "err" ? "ERR0R!" : "??%"}</span>
+      </div>
+      <div className={`relative mt-2 h-5 border-2 border-border bg-background ${st === "err" ? "glitch" : ""}`}>
+        <div className={`h-full ${k.c} transition-[width] duration-1000 ease-out`} style={{ width: st === "ok" ? `${k.v}%` : "0%", transitionDelay: `${i * 0}ms` }} />
+        {st === "idle" && <span className="absolute inset-0 grid place-items-center font-mono text-[10px] uppercase text-muted-foreground">arahkan kursor ke sini 👆</span>}
+        {st === "err" && <span className="absolute inset-0 grid place-items-center bg-destructive font-mono text-[10px] uppercase text-destructive-foreground">⚠ system error... loading</span>}
+      </div>
+    </div>
+  );
+}
+
 function Skills() {
   return (
     <div className="mt-24">
-      <p className="reveal font-hand text-2xl text-muted-foreground">yang aku bisa ⚡</p>
+      <p className="reveal font-hand text-2xl text-muted-foreground">yang aku bisa 🛠️</p>
       <h2 className="reveal font-pixel text-4xl sm:text-5xl">Keahlian</h2>
       <div className="reveal relative mt-8 -rotate-1 border-2 border-border bg-card p-6 shadow-hard sm:p-10">
         <span className="tape -top-3 right-10 rotate-6" />
         <div className="grid gap-6 md:grid-cols-2">
-          {SKILLS.map((k, i) => (
-            <div key={k.n}>
-              <div className="flex justify-between font-mono text-sm uppercase tracking-wider">
-                <span>{k.n}</span><span className="font-pixel">{k.v}%</span>
-              </div>
-              <div className="mt-2 h-5 border-2 border-border bg-background">
-                <div className={`skill-bar h-full ${k.c}`} style={{ "--w": `${k.v}%`, "--d": `${300 + i * 150}ms` } as React.CSSProperties} />
-              </div>
-            </div>
-          ))}
+          {SKILLS.map((k, i) => <SkillRow key={k.n} k={k} i={i} />)}
         </div>
       </div>
     </div>
@@ -285,7 +294,7 @@ function Project() {
         <div className="mt-12 grid items-center gap-10 md:grid-cols-[3fr_2fr]">
           <article className="reveal group relative" style={{ "--d": "150ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-sky px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 01</span>
-            <div className="wet-paper wet-a torn-scrap border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="proj-paper wet-a border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest opacity-70">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Qyqalb App</h3>
               <p className="mt-4 max-w-md opacity-80">Aplikasi kumpulan doa dan waktu sholat — biar ibadah harian makin gampang.</p>
@@ -316,7 +325,7 @@ function Project() {
           </div>
           <article className="reveal group relative md:-mt-4" style={{ "--d": "200ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-rose px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 02</span>
-            <div className="wet-paper wet-b torn-scrap border-2 border-border p-8 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="proj-paper wet-b border-2 border-border p-8 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Note App</h3>
               <p className="mt-4 max-w-md font-hand text-2xl">mencatat note note ✎</p>
@@ -482,6 +491,45 @@ function Passers() {
   );
 }
 
+function playBaa() {
+  try {
+    const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx(); const t = ctx.currentTime;
+    const o = ctx.createOscillator(); o.type = "sawtooth";
+    o.frequency.setValueAtTime(320, t); o.frequency.linearRampToValueAtTime(260, t + 0.9);
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 9; const lg = ctx.createGain(); lg.gain.value = 25;
+    lfo.connect(lg).connect(o.frequency);
+    const f = ctx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 1400;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.25, t + 0.05); g.gain.linearRampToValueAtTime(0, t + 0.95);
+    o.connect(f).connect(g).connect(ctx.destination);
+    o.start(); lfo.start(); o.stop(t + 1); lfo.stop(t + 1); o.onended = () => ctx.close();
+  } catch { /* no audio */ }
+}
+
+const BOO = ["🐑", "👻", "🤡", "🐸", "🙀"];
+function ScrollBoo() {
+  const [boo, setBoo] = useState<{ e: string; side: "left" | "right" } | null>(null);
+  useEffect(() => {
+    const seen = new Set<string>();
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting || seen.has(e.target.id)) return;
+      seen.add(e.target.id);
+      setBoo({ e: BOO[seen.size % BOO.length] ?? "🐑", side: seen.size % 2 ? "left" : "right" });
+      playBaa();
+      setTimeout(() => setBoo(null), 1600);
+    }), { threshold: 0.25 });
+    ["about", "project", "contact"].forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    return () => io.disconnect();
+  }, []);
+  if (!boo) return null;
+  return (
+    <div aria-hidden="true" className={`boo pointer-events-none fixed top-1/3 z-[97] text-8xl ${boo.side === "left" ? "left-2" : "right-2"}`}>
+      <span className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-2 border-border bg-card px-3 py-1 font-hand text-2xl text-foreground">baaaaa! 😝</span>
+      {boo.e}
+    </div>
+  );
+}
+
 function Peeker() {
   const [show, setShow] = useState(false);
   useEffect(() => {
@@ -555,6 +603,7 @@ function Index() {
       <Lightbox />
       {open && <Peeker />}
       <Passers />
+      {open && <ScrollBoo />}
       <ClickBurst />
       <Cover open={open} onOpen={onOpen} />
     </main>
