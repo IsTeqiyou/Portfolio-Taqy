@@ -88,7 +88,7 @@ function Header() {
   useEffect(() => {
     const io = new IntersectionObserver(
       (es) => es.forEach((e) => e.isIntersecting && setActive(e.target.id)),
-      { threshold: 0.5 },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
     );
     NAV.forEach((n) => { const el = document.getElementById(n.id); if (el) io.observe(el); });
     return () => io.disconnect();
@@ -147,7 +147,7 @@ function Hero() {
           <div className="absolute inset-0 translate-x-6 translate-y-6 -rotate-3 rounded-3xl bg-foreground/85 blur-[2px]" />
           <div className="absolute inset-0 -translate-x-4 translate-y-3 rotate-6 rounded-3xl bg-sun" />
           <div className="floaty relative" style={{ "--r": "-2deg" } as React.CSSProperties}>
-            <img src={me} alt="Muhammad Taqiyuddin" onClick={() => zoom(me)} className="relative w-full cursor-zoom-in rounded-3xl border-2 border-border shadow-soft" />
+            <img src={me} alt="Muhammad Taqiyuddin" className="relative w-full rounded-3xl border-2 border-border shadow-soft" />
           </div>
           <span className="floaty absolute -top-6 -right-4 flex rotate-12 items-center gap-2 font-hand text-3xl text-rose" style={{ animationDelay: "1s" }}>
             <svg viewBox="0 0 24 24" className="h-7 w-7 -rotate-6" fill="currentColor" aria-hidden="true"><path d="M13.6 1.8 4.2 13.4h5.4l-1.4 8.8 9.6-11.8h-5.6z" /></svg>
@@ -173,10 +173,11 @@ function Polaroid({ src, cap, rot, d, fit }: { src: string; cap: string; rot: st
 function About() {
   const paras = [
     "Hi there! Nama saya Muhammad Taqiyuddin, biasa dipanggil Taqy.",
-    "Time flies, nggak kerasa udah mau 6 tahun aja saya stay dan nyantri di Pondok Tahfizh Plus Abu Dzar, Bogor. Originally dari Bangka terus merantau ke Jawa, saya udah join dari zaman SMP as part of angkatan 1—and fun fact, saya itu santri paling muda di angkatan. Rasanya baru kemarin struggle adaptasi, tahu-tahu sekarang udah kelas 12 aja.",
-    "Back then, saya sempat clueless banget dan bingung mau dibawa ke mana tujuan hidup ini. Tapi this long journey benar-benar changed my whole perspective. Nggak cuma fokus increasing hafalan Alquran dan deepening ilmu agama, saya juga belajar IT as an essential skill buat embrace era digital.",
-    "The vibe di pondok juga makin seru karena dikelilingi banyak teman seperjuangan. To blow off some steam dari rutinitas harian, saya biasanya suka play sports kayak futsal atau berenang bareng mereka.",
-    "Right now, mendekati graduation, saya lagi in the process of applying ke perguruan tinggi swasta (PTS). With all the skills, hafalan, dan life experience selama di pondok, saya definitely ready and more confident buat melangkah ke jenjang kuliah!",
+    "Time flies, nggak kerasa udah hampir 6 tahun aja saya nyantri di Pondok Tahfizh Plus Abu Dzar. Berawal dari Bangka, merantau ke Jawa sejak SMP sebagai bagian dari angkatan pertama. Fun fact, saya jadi santri paling muda di angkatan. Rasanya baru kemarin masih awkward beradaptasi dengan lingkungan baru, eh sekarang udah kelas 12 aja.",
+    "Banyak banget hal yang berubah selama di sini. Dari yang awalnya masih clueless soal arah hidup, sampai akhirnya mulai menemukan passion lewat Al-Qur'an, ilmu agama, dan dunia IT. Belum lagi berbagai keseruan bareng teman-teman, mulai dari belajar bareng sampai olahraga bareng yang pastinya bakal ngangenin banget.",
+    "And now, a new chapter begins! Alhamdulillah, saya berhasil diterima di Telkom University Bandung, Program Studi Psikologi. Rasanya campur aduk, antara excited menyambut kehidupan baru dan sedih karena sebentar lagi harus meninggalkan tempat yang udah terasa seperti rumah sendiri.",
+    "Six years, countless memories, and a whole new beginning.",
+    "Thank you, Abu Dzar! Banyak cerita yang mungkin nggak bisa diulang, tapi bakal selalu jadi bagian dari perjalanan hidup saya.",
   ];
   return (
     <section id="about" className="paper relative min-h-screen px-6 py-28">
@@ -284,7 +285,7 @@ function Project() {
         <div className="mt-12 grid items-center gap-10 md:grid-cols-[3fr_2fr]">
           <article className="reveal group relative" style={{ "--d": "150ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-sky px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 01</span>
-            <div className="origami origami-a torn-bottom border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="wet-paper wet-a torn-scrap border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest opacity-70">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Qyqalb App</h3>
               <p className="mt-4 max-w-md opacity-80">Aplikasi kumpulan doa dan waktu sholat — biar ibadah harian makin gampang.</p>
@@ -315,7 +316,7 @@ function Project() {
           </div>
           <article className="reveal group relative md:-mt-4" style={{ "--d": "200ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-rose px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 02</span>
-            <div className="origami origami-b torn-bottom border-2 border-border p-8 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div className="wet-paper wet-b torn-scrap border-2 border-border p-8 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Note App</h3>
               <p className="mt-4 max-w-md font-hand text-2xl">mencatat note note ✎</p>
@@ -355,14 +356,13 @@ function Contact({ onClose }: { onClose: () => void }) {
           ))}
         </div>
       </div>
-      <button type="button" onClick={onClose}
+      <button type="button" onClick={() => { playPaper(); window.dispatchEvent(new Event("funpass")); onClose(); }}
         className="book-cover reveal group relative mx-auto mt-20 flex w-full max-w-md flex-col items-center gap-2 rounded-r-2xl border-2 border-border px-8 py-10 text-primary-foreground shadow-hard transition-transform hover:-rotate-1">
         <span className="absolute inset-y-0 left-0 w-4 rounded-l bg-foreground/40" />
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-sun">~ the end ~</span>
         <span className="font-pixel text-2xl sm:text-3xl">Tutup Buku</span>
         <span className="flex flex-col items-center text-center font-hand text-xl leading-snug opacity-80">
           <span>makasih udah mampir yaa</span>
-          <span className="text-sun">✦</span>
           <span>klik buat balik ke cover</span>
         </span>
       </button>
@@ -458,6 +458,30 @@ function ClickBurst() {
   );
 }
 
+const PASSERS = ["🐎", "🐦", "🦆", "🐄", "🐌", "🦖"];
+function Passers() {
+  const [list, setList] = useState<{ id: number; e: string; top: number; dur: number; rev: boolean }[]>([]);
+  useEffect(() => {
+    let id = 0;
+    const on = () => {
+      const add = Array.from({ length: 4 }, (_, k) => ({ id: id++, e: PASSERS[Math.floor(Math.random() * PASSERS.length)] ?? "🐎", top: 15 + Math.random() * 65, dur: 2.5 + Math.random() * 2, rev: k % 2 === 1 }));
+      setList((l) => [...l, ...add]);
+      setTimeout(() => setList((l) => l.filter((x) => !add.includes(x))), 5000);
+    };
+    window.addEventListener("funpass", on);
+    return () => window.removeEventListener("funpass", on);
+  }, []);
+  return (
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[96] overflow-hidden">
+      {list.map((p) => (
+        <span key={p.id} className={`passby absolute text-6xl ${p.rev ? "rev" : ""}`} style={{ top: `${p.top}%`, animationDuration: `${p.dur}s` }}>
+          <span className="inline-block" style={{ transform: p.rev ? "none" : "scaleX(-1)" }}>{p.e}</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function Peeker() {
   const [show, setShow] = useState(false);
   useEffect(() => {
@@ -530,6 +554,7 @@ function Index() {
       <Contact onClose={onClose} />
       <Lightbox />
       {open && <Peeker />}
+      <Passers />
       <ClickBurst />
       <Cover open={open} onOpen={onOpen} />
     </main>
