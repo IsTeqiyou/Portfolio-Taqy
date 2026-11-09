@@ -24,6 +24,11 @@ export function playWelcome() {
   });
 }
 
+export function pauseWelcome() {
+  pendingWelcome = false;
+  welcome?.pause();
+}
+
 export function playPaperSound(kind: "touch" | "turn" | "close" = "turn") {
   if (!context || context.state !== "running") return;
   if (kind === "touch" && performance.now() - lastPaper < 180) return;
