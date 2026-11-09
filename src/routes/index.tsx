@@ -16,6 +16,7 @@ import cert7 from "@/assets/cert7.jpg";
 import cert8 from "@/assets/cert8.jpg";
 import mem4b from "@/assets/memory4b.jpg";
 import { playPaperSound, playSkillSound, playWelcome, unlockPortfolioAudio } from "@/lib/portfolio-audio";
+import { AboutNarration } from "@/components/about-narration";
 
 const zoom = (src: string) => window.dispatchEvent(new CustomEvent("zoom-photo", { detail: src }));
 
@@ -173,7 +174,7 @@ function Polaroid({ src, cap, rot, d, fit }: { src: string; cap: string; rot: st
   );
 }
 
-function About() {
+function About({ open }: { open: boolean }) {
   const paras = [
     "Hi there! Nama saya Muhammad Taqiyuddin, biasa dipanggil Taqy.",
     "Time flies, nggak kerasa udah hampir 6 tahun aja saya nyantri di Pondok Tahfizh Plus Abu Dzar. Berawal dari Bangka, merantau ke Jawa sejak SMP sebagai bagian dari angkatan pertama. Fun fact, saya jadi santri paling muda di angkatan. Rasanya baru kemarin masih awkward beradaptasi dengan lingkungan baru, eh sekarang udah kelas 12 aja.",
@@ -187,6 +188,7 @@ function About() {
       <div className="mx-auto max-w-6xl">
         <p className="reveal font-hand text-2xl text-muted-foreground">tentang aku!</p>
         <h2 className="reveal mt-2 inline-block border-2 border-border bg-card px-5 py-2 font-pixel text-3xl shadow-hard sm:text-4xl">Siapa Saya?</h2>
+        <AboutNarration open={open} />
         <div className="mt-12 grid items-start gap-12 lg:grid-cols-2">
           <div className="space-y-5 font-hand text-xl leading-relaxed sm:text-2xl">
             {paras.map((p, i) => (
@@ -589,7 +591,7 @@ function Index() {
       <Decor />
       <Header />
       <Hero />
-      <About />
+      <About open={open} />
       <Project />
       <Contact onClose={onClose} />
       <Lightbox />
