@@ -15,6 +15,7 @@ import cert6 from "@/assets/cert6.png";
 import cert7 from "@/assets/cert7.jpg";
 import cert8 from "@/assets/cert8.jpg";
 import mem4b from "@/assets/memory4b.jpg";
+import { playPaperSound, playSkillSound, playWelcome, unlockPortfolioAudio } from "@/lib/portfolio-audio";
 
 const zoom = (src: string) => window.dispatchEvent(new CustomEvent("zoom-photo", { detail: src }));
 
@@ -216,7 +217,7 @@ const SKILLS = [
 
 function SkillRow({ k, i }: { k: (typeof SKILLS)[number]; i: number }) {
   const [st, setSt] = useState<"idle" | "err" | "ok">("idle");
-  const go = () => { if (st !== "idle") return; setSt("err"); setTimeout(() => setSt("ok"), 900); };
+  const go = () => { if (st !== "idle") return; setSt("err"); playSkillSound("error"); setTimeout(() => { setSt("ok"); playSkillSound("ready"); }, 900); };
   return (
     <div onMouseEnter={go} onClick={go} className="cursor-help">
       <div className="flex justify-between font-mono text-sm uppercase tracking-wider">
@@ -298,7 +299,7 @@ function Project() {
         <div className="mt-12 grid items-center gap-10 md:grid-cols-[3fr_2fr]">
           <article className="reveal group relative" style={{ "--d": "150ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-sky px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 01</span>
-            <div className="proj-paper wet-a border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div onPointerEnter={() => playPaperSound("turn")} onPointerDown={() => playPaperSound("turn")} className="proj-paper wet-a border-2 border-border p-6 pb-12 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest opacity-70">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Qyqalb App</h3>
               <p className="mt-4 max-w-md opacity-80">Aplikasi kumpulan doa dan waktu sholat — biar ibadah harian makin gampang.</p>
@@ -329,7 +330,7 @@ function Project() {
           </div>
           <article className="reveal group relative md:-mt-4" style={{ "--d": "200ms" } as React.CSSProperties}>
             <span className="relative z-10 inline-block bg-rose px-5 py-2 font-mono text-xs uppercase tracking-widest text-primary-foreground [clip-path:polygon(0_0,88%_0,100%_100%,0_100%)]">✦ Proyek 02</span>
-            <div className="proj-paper wet-b border-2 border-border p-8 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
+            <div onPointerEnter={() => playPaperSound("turn")} onPointerDown={() => playPaperSound("turn")} className="proj-paper wet-b border-2 border-border p-8 text-foreground shadow-soft transition-transform duration-500 group-hover:-translate-y-2 sm:p-10">
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">● Aplikasi Android</p>
               <h3 className="mt-3 text-4xl font-bold sm:text-5xl">Note App</h3>
               <p className="mt-4 max-w-md font-hand text-2xl">mencatat note note ✎</p>
@@ -369,7 +370,7 @@ function Contact({ onClose }: { onClose: () => void }) {
           ))}
         </div>
       </div>
-      <button type="button" onClick={() => { playPaper(); window.dispatchEvent(new Event("funpass")); onClose(); }}
+      <button type="button" onPointerEnter={() => playPaperSound("touch")} onPointerDown={() => playPaperSound("touch")} onClick={() => { playPaperSound("close"); window.dispatchEvent(new Event("funpass")); onClose(); }}
         className="book-cover reveal group relative mx-auto mt-20 flex w-full max-w-md flex-col items-center gap-2 rounded-r-2xl border-2 border-border px-8 py-10 text-primary-foreground shadow-hard transition-transform hover:-rotate-1">
         <span className="absolute inset-y-0 left-0 w-4 rounded-l bg-foreground/40" />
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-sun">~ the end ~</span>
@@ -426,27 +427,6 @@ function Lightbox() {
       </figure>
     </div>
   );
-}
-
-function playPaper() {
-  try {
-    const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new Ctx();
-    const dur = 0.7;
-    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) {
-      const t = i / d.length;
-      const crackle = Math.random() < 0.02 ? 3 : 1;
-      d[i] = (Math.random() * 2 - 1) * crackle * Math.pow(Math.sin(Math.PI * t), 0.6) * (0.6 + 0.4 * Math.sin(t * 40));
-    }
-    const src = ctx.createBufferSource(); src.buffer = buf;
-    const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 2400; bp.Q.value = 0.7;
-    bp.frequency.linearRampToValueAtTime(900, ctx.currentTime + dur);
-    const g = ctx.createGain(); g.gain.value = 0.35;
-    src.connect(bp).connect(g).connect(ctx.destination);
-    src.start(); src.onended = () => ctx.close();
-  } catch { /* audio not supported */ }
 }
 
 const POP = ["😂", "🤣", "👀", "💥", "🐸", "🙀", "✨", "🔥", "🤪"];
@@ -549,17 +529,19 @@ function Peeker() {
 }
 
 function Cover({ open, onOpen: rawOpen }: { open: boolean; onOpen: () => void }) {
-  const onOpen = useCallback(() => { playPaper(); rawOpen(); }, [rawOpen]);
+  const opening = useRef(false);
+  const onOpen = useCallback(() => { if (opening.current) return; opening.current = true; playPaperSound("turn"); playWelcome(); rawOpen(); }, [rawOpen]);
   const startY = useRef<number | null>(null);
   const [drag, setDrag] = useState(0);
   useEffect(() => {
+    if (!open) opening.current = false;
     document.body.style.overflow = open ? "" : "hidden";
     if (open) return;
     const wheel = (e: WheelEvent) => e.deltaY > 5 && onOpen();
     window.addEventListener("wheel", wheel, { passive: true });
     return () => window.removeEventListener("wheel", wheel);
   }, [open, onOpen]);
-  const down = (y: number) => { startY.current = y; };
+  const down = (y: number) => { startY.current = y; playPaperSound("touch"); };
   const move = (y: number) => { if (startY.current !== null) setDrag(Math.max(0, startY.current - y)); };
   const up = (y: number) => {
     if (startY.current !== null && startY.current - y > 30) onOpen();
@@ -567,8 +549,8 @@ function Cover({ open, onOpen: rawOpen }: { open: boolean; onOpen: () => void })
   };
   return (
     <div aria-hidden={open}
+      onPointerEnter={() => !open && playPaperSound("touch")}
       onPointerDown={(e) => down(e.clientY)} onPointerMove={(e) => move(e.clientY)} onPointerUp={(e) => up(e.clientY)}
-      onTouchStart={(e) => down(e.touches[0]?.clientY ?? 0)} onTouchMove={(e) => move(e.touches[0]?.clientY ?? 0)} onTouchEnd={(e) => up(e.changedTouches[0]?.clientY ?? 0)}
       style={drag && !open ? { transform: `translateY(${-drag}px)`, transition: "none" } : undefined}
       className={`book-cover fixed inset-0 z-[80] flex touch-none select-none flex-col items-center justify-center px-6 text-center text-primary-foreground ${open ? "open pointer-events-none" : ""}`}>
       <span className="absolute inset-y-0 left-0 w-6 bg-foreground/40 sm:w-10" />
@@ -593,6 +575,12 @@ function Cover({ open, onOpen: rawOpen }: { open: boolean; onOpen: () => void })
 
 function Index() {
   useReveal();
+  useEffect(() => {
+    const unlock = () => { try { unlockPortfolioAudio(); } catch { /* unsupported browser */ } };
+    window.addEventListener("pointerdown", unlock, true);
+    window.addEventListener("keydown", unlock, true);
+    return () => { window.removeEventListener("pointerdown", unlock, true); window.removeEventListener("keydown", unlock, true); };
+  }, []);
   const [open, setOpen] = useState(false);
   const onOpen = useCallback(() => { setOpen(true); window.scrollTo({ top: 0 }); }, []);
   const onClose = useCallback(() => { window.scrollTo({ top: 0, behavior: "smooth" }); setTimeout(() => setOpen(false), 500); }, []);
