@@ -1,4 +1,4 @@
-import welcomeAsset from "@/assets/taqy-welcome.mp3.asset.json";
+import welcomeUrl from "@/assets/taqy-welcome.mp3";
 
 let context: AudioContext | undefined;
 let welcome: HTMLAudioElement | undefined;
@@ -9,7 +9,7 @@ export function unlockPortfolioAudio() {
   if (typeof window === "undefined") return;
   context ??= new AudioContext();
   void context.resume().catch(() => {});
-  welcome ??= new Audio(new URL(welcomeAsset.url, "https://caritaqydisini.lovable.app").href);
+  welcome ??= new Audio(welcomeUrl);
   welcome.volume = 0.8;
   if (pendingWelcome) playWelcome();
 }
