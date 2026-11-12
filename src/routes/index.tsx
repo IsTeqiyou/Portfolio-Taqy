@@ -577,7 +577,7 @@ function Cover({ open, onOpen: rawOpen }: { open: boolean; onOpen: () => void })
       onPointerEnter={() => !open && playPaperSound("touch")}
       onPointerDown={(e) => down(e.clientY)} onPointerMove={(e) => move(e.clientY)} onPointerUp={(e) => up(e.clientY)}
       style={drag && !open ? { transform: `translateY(${-drag}px)`, transition: "none" } : undefined}
-      className={`book-cover fixed inset-0 z-[80] flex touch-none select-none flex-col items-center justify-center px-6 text-center text-primary-foreground ${open ? "open pointer-events-none" : ""}`}>
+      className={`book-cover fixed inset-0 z-[80] flex touch-none select-none flex-col items-center justify-center overflow-hidden px-6 text-center text-primary-foreground ${open ? "open pointer-events-none" : ""}`}>
       <span className="absolute inset-y-0 left-0 w-6 bg-foreground/40 sm:w-10" />
       <span className="absolute inset-y-0 left-8 w-px border-l border-dashed border-sun/40 sm:left-14" />
       {["left-10 top-6 sm:left-16", "right-6 top-6", "left-10 bottom-6 sm:left-16", "right-6 bottom-6"].map((p, i) => (
@@ -589,9 +589,18 @@ function Cover({ open, onOpen: rawOpen }: { open: boolean; onOpen: () => void })
       <span className="floaty absolute bottom-[22%] right-[14%] rotate-6 bg-mint px-3 py-1 font-mono text-xs text-foreground shadow-hard" style={{ animationDelay: "1.5s" }}>⚡ handle with care</span>
       <span className="spin-drift absolute right-[30%] bottom-[10%] text-3xl text-sun/60">✦</span>
       <span className="spin-drift absolute left-[30%] top-[8%] text-2xl text-sun/50">☆</span>
+      <div aria-hidden="true" className="cover-sticker absolute right-[12%] top-[7%] flex rotate-12 items-center gap-2 rounded-lg border-2 border-border bg-card px-3 py-2 text-foreground shadow-hard">
+        <span className="text-3xl sm:text-4xl">🐸</span><span className="font-hand text-lg leading-tight">hehe<br />ketahuan!</span>
+      </div>
+      <div aria-hidden="true" className="cover-sticker absolute bottom-[6%] left-[14%] flex -rotate-12 items-center gap-2 rounded-lg border-2 border-border bg-sun px-3 py-2 text-foreground shadow-hard">
+        <span className="text-3xl sm:text-4xl">🦆</span><span className="font-hand text-lg">wkwkwk</span>
+      </div>
+      <span aria-hidden="true" className="cover-sticker absolute bottom-[7%] right-[10%] grid h-16 w-16 rotate-12 place-items-center rounded-full border-4 border-card bg-mint text-4xl shadow-hard sm:h-20 sm:w-20 sm:text-5xl">🛸</span>
       <div className="relative border-4 border-double border-sun/70 px-8 py-12 sm:px-16 sm:py-16">
-        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-sun sm:text-xs">✦ vol. 01 ✦</p>
-        <h1 className="mt-4 font-pixel text-4xl leading-tight sm:text-6xl">Portfolio<br />Taqy</h1>
+        <h1 key={open ? "opened" : "closed"} className="font-pixel text-4xl leading-tight sm:text-6xl">
+          <span className="cover-title-left block">Portfolio</span>
+          <span className="cover-title-right block">Taqy</span>
+        </h1>
       </div>
       <button type="button" onClick={onOpen} className="nudge mt-12 font-mono text-xs uppercase tracking-widest text-sun">↑ tarik ke atas buat buka ↑</button>
     </div>

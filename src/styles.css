@@ -273,6 +273,27 @@ h2.font-pixel:hover, h3:hover { animation: jelly .6s; display: inline-block; }
 .glitch { animation: glitch .25s steps(2) infinite; }
 @keyframes boo { 0% { transform: scale(0) rotate(-30deg); } 25% { transform: scale(1.3) rotate(10deg); } 40%,80% { transform: scale(1) rotate(0); } 100% { transform: scale(0) translateY(60px); } }
 .boo { animation: boo 1.6s cubic-bezier(.3,1.6,.5,1) forwards; }
+@keyframes cover-title-left {
+  0% { opacity: 0; transform: translateX(-100vw) rotate(-12deg); }
+  70% { opacity: 1; transform: translateX(16px) rotate(2deg); }
+  85% { transform: translateX(-6px) rotate(-1deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes cover-title-right {
+  0% { opacity: 0; transform: translateX(100vw) rotate(12deg); }
+  70% { opacity: 1; transform: translateX(-16px) rotate(-3deg); }
+  85% { transform: translateX(6px) rotate(1deg); }
+  100% { opacity: 1; transform: none; }
+}
+.cover-title-left { animation: cover-title-left 1.1s cubic-bezier(.22,.8,.3,1) both; }
+.cover-title-right { animation: cover-title-right 1.1s cubic-bezier(.22,.8,.3,1) .18s both; }
+.cover-sticker { transition: scale .2s ease; }
+.cover-sticker:hover { scale: 1.12; }
+@media (prefers-reduced-motion: reduce) {
+  .cover-title-left, .cover-title-right { animation: none; }
+  .cover-sticker { transition: none; }
+  .cover-sticker:hover { scale: 1; }
+}
 /* Navigation stays still, including the shared sticker hover effect. */
 header *, header *:hover { animation: none !important; transition: none !important; }
 header nav button {
