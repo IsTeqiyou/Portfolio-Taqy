@@ -275,6 +275,14 @@ h2.font-pixel:hover, h3:hover { animation: jelly .6s; display: inline-block; }
 .boo { animation: boo 1.6s cubic-bezier(.3,1.6,.5,1) forwards; }
 /* Navigation stays still, including the shared sticker hover effect. */
 header *, header *:hover { animation: none !important; transition: none !important; }
+header nav button {
+  transition: transform 180ms ease-out !important;
+  transform-origin: center;
+}
+header nav button:hover, header nav button:focus-visible { transform: scale(1.35); }
+header nav button:active { transform: scale(.9); }
 @media (prefers-reduced-motion: reduce) {
+  header nav button { transition: none !important; }
+  header nav button:hover, header nav button:focus-visible, header nav button:active { transform: none; }
   .passby, .passby > span, .burst, .boo, .peeker { animation: none; transition: none; }
 }
