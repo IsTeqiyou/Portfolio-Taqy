@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep portfolio sound effects in a browser-only audio helper with a shared gesture-unlocked AudioContext and a prerecorded welcome clip; no runtime AI generation is needed for a fixed greeting.
+- Keep ambient scroll visitors in the existing Passers effect with gesture-independent visuals, cleaned-up timers and reduced-motion checks, so decorations do not block navigation or create extra audio.

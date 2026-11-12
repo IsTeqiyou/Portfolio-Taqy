@@ -273,3 +273,8 @@ h2.font-pixel:hover, h3:hover { animation: jelly .6s; display: inline-block; }
 .glitch { animation: glitch .25s steps(2) infinite; }
 @keyframes boo { 0% { transform: scale(0) rotate(-30deg); } 25% { transform: scale(1.3) rotate(10deg); } 40%,80% { transform: scale(1) rotate(0); } 100% { transform: scale(0) translateY(60px); } }
 .boo { animation: boo 1.6s cubic-bezier(.3,1.6,.5,1) forwards; }
+/* Navigation stays still, including the shared sticker hover effect. */
+header *, header *:hover { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .passby, .passby > span, .burst, .boo, .peeker { animation: none; transition: none; }
+}

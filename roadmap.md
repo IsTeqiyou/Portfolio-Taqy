@@ -1,0 +1,3 @@
+- [x] Remove header hover motion and keep navigation highlights.
+- [x] Add a scrapbook frog doodle and occasional playful scroll visitors.
+- [x] Verify header stability, scrolling, and mobile layout.

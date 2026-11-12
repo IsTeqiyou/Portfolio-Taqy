@@ -99,17 +99,17 @@ function Header() {
   return (
     <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
       <nav className="flex items-center gap-1 rounded-full border-2 border-border bg-card p-1.5 shadow-hard">
-        <span className="spin-slow mx-1 grid h-8 w-8 place-items-center rounded-full bg-rose font-pixel text-xs text-primary-foreground">T</span>
+        <span className="mx-1 grid h-8 w-8 place-items-center rounded-full bg-rose font-pixel text-xs text-primary-foreground">T</span>
         {NAV.map((n) => (
           <a key={n.id} href={`#${n.id}`}
-            className={`rounded-full px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider transition-all duration-300 sm:px-4 ${active === n.id ? "bg-sun text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+            className={`rounded-full px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider sm:px-4 ${active === n.id ? "bg-sun text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
             <span className="mr-1">{n.icon}</span><span className="hidden sm:inline">{n.label}</span>
           </a>
         ))}
         <span className="mx-1 flex gap-1.5">
-          <button type="button" aria-label="Scroll ke bawah" title="Scroll ke bawah" onClick={() => window.scrollBy({ top: window.innerHeight * 0.8, behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-sun transition-transform hover:scale-150" />
-          <button type="button" aria-label="Scroll ke atas" title="Balik ke atas" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-rose transition-transform hover:scale-150" />
-          <button type="button" aria-label="Loncat ke kontak" title="Langsung ke kontak" onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-leaf transition-transform hover:scale-150" />
+          <button type="button" aria-label="Scroll ke bawah" title="Scroll ke bawah" onClick={() => window.scrollBy({ top: window.innerHeight * 0.8, behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-sun" />
+          <button type="button" aria-label="Scroll ke atas" title="Balik ke atas" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-rose" />
+          <button type="button" aria-label="Loncat ke kontak" title="Langsung ke kontak" onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="h-3.5 w-3.5 rounded-full border border-border bg-leaf" />
         </span>
       </nav>
     </header>
@@ -201,6 +201,10 @@ function About() {
             <Polaroid src={mem5} cap="ku" rot="-3deg" d="300ms" />
             <Polaroid src={mem6} cap="benci" rot="2deg" d="350ms" />
           </div>
+        </div>
+        <div aria-hidden="true" className="reveal mt-12 flex items-center justify-end gap-3 font-hand text-xl text-muted-foreground">
+          <span className="floaty text-4xl">🐸</span>
+          <span className="-rotate-3 border-b-2 border-dashed border-leaf">aku numpang lewat yaa...</span>
         </div>
       </div>
     </section>
@@ -435,6 +439,8 @@ function ClickBurst() {
   useEffect(() => {
     let id = 0;
     const on = (ev: MouseEvent) => {
+      if (ev.target instanceof Element && ev.target.closest("header")) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const add = Array.from({ length: 5 }, () => ({ id: id++, x: ev.clientX, y: ev.clientY, e: POP[Math.floor(Math.random() * POP.length)] ?? "✨", dx: Math.random() * 160 - 80 }));
       setBits((b) => [...b, ...add]);
       setTimeout(() => setBits((b) => b.filter((x) => !add.includes(x))), 900);
@@ -452,18 +458,37 @@ function ClickBurst() {
 }
 
 const PASSERS = ["🐎", "🐦", "🦆", "🐄", "🐌", "🦖"];
-function Passers() {
+function Passers({ open }: { open: boolean }) {
   const [list, setList] = useState<{ id: number; e: string; top: number; dur: number; rev: boolean }[]>([]);
   useEffect(() => {
     let id = 0;
+    const timers = new Set<ReturnType<typeof setTimeout>>();
+    const expire = (add: typeof list) => {
+      const timer = setTimeout(() => { setList((l) => l.filter((x) => !add.includes(x))); timers.delete(timer); }, 5000);
+      timers.add(timer);
+    };
     const on = () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const add = Array.from({ length: 4 }, (_, k) => ({ id: id++, e: PASSERS[Math.floor(Math.random() * PASSERS.length)] ?? "🐎", top: 15 + Math.random() * 65, dur: 2.5 + Math.random() * 2, rev: k % 2 === 1 }));
       setList((l) => [...l, ...add]);
-      setTimeout(() => setList((l) => l.filter((x) => !add.includes(x))), 5000);
+      expire(add);
+    };
+    let lastY = window.scrollY;
+    let distance = 0;
+    let lastVisit = 0;
+    const scroll = () => {
+      distance += Math.abs(window.scrollY - lastY);
+      lastY = window.scrollY;
+      if (!open || distance < 700 || Date.now() - lastVisit < 12000 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      lastVisit = Date.now(); distance = 0;
+      const add = [{ id: id++, e: ["🦆", "🛸", "🐢"][id % 3] ?? "🦆", top: 82, dur: 4.5, rev: id % 2 === 0 }];
+      setList((l) => [...l, ...add]);
+      expire(add);
     };
     window.addEventListener("funpass", on);
-    return () => window.removeEventListener("funpass", on);
-  }, []);
+    window.addEventListener("scroll", scroll, { passive: true });
+    return () => { window.removeEventListener("funpass", on); window.removeEventListener("scroll", scroll); timers.forEach(clearTimeout); };
+  }, [open]);
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[96] overflow-hidden">
       {list.map((p) => (
@@ -594,7 +619,7 @@ function Index() {
       <Contact onClose={onClose} />
       <Lightbox />
       {open && <Peeker />}
-      <Passers />
+      <Passers open={open} />
       {open && <ScrollBoo />}
       <ClickBurst />
       <Cover open={open} onOpen={onOpen} />
